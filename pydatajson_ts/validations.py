@@ -85,7 +85,7 @@ def validate_title_length(df):
             )
 
 
-def validate_missing_fields(df):
+def validate_missing_values(df):
     # Las series deben tener una proporción máxima de missings
     for field in df.columns:
         total_values = len(df[field])
@@ -144,7 +144,7 @@ def validate_no_repeated_fields(catalog, distrib_meta):
             raise ce.FieldIdRepetitionError(field_distrib["id"])
 
 
-def validate_no_repeating_titles(distrib_meta):
+def validate_no_repeated_titles(distrib_meta):
     # 7. Los títulos de fields no deben repetirse en una distribución
     fields = distrib_meta["field"]
     _assert_repeated_value("title", fields, ce.FieldTitleRepetitionError)
@@ -169,13 +169,24 @@ def validate_values_are_numeric(df, distrib_meta):
             raise ce.InvalidNumericField(field_title, df[field_title])
 
 
+def validate_missing_fields(df, distrib_meta):
+    fields = [
+        field["title"] for field in distrib_meta["field"]
+        if "specialType" not in field or field["specialType"] != "time_index"
+    ]
+    for field in fields:
+        if field not in df:
+            raise ce.FieldMissingInDistrbutionError(field,
+                                                    distrib_meta['identifier'])
+
+
 def validate_distribution(df, catalog, dataset_meta, distrib_meta,
                           distribution_identifier):
 
     # validaciones sólo de metadatos
     validate_field_id(distrib_meta)
     validate_no_repeated_fields(catalog, distrib_meta)
-    validate_no_repeating_titles(distrib_meta)
+    validate_no_repeated_titles(distrib_meta)
     validate_no_repeated_descriptions(distrib_meta)
 
     # validaciones de headers
@@ -187,6 +198,7 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     validate_using_temporal(df, dataset_meta)
 
     # validaciones de los valores de las series
+    validate_missing_fields(df, distrib_meta)
     validate_values_are_numeric(df, distrib_meta)
     validate_field_few_values(df)
-    validate_missing_fields(df)
+    validate_missing_values(df)
