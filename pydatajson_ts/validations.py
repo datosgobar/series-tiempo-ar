@@ -7,12 +7,15 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import with_statement
 import pandas as pd
+import numpy as np
 import arrow
 import string
 from pandas.api.types import is_numeric_dtype
 
 import custom_exceptions as ce
 from dateutil.parser import parse as parse_time
+
+from pydatajson_ts.helpers import freq_iso_to_pandas
 
 MINIMUM_VALUES = 2
 MAX_MISSING_PROPORTION = 0.99
@@ -98,6 +101,7 @@ def validate_missing_values(df):
             )
 
 
+# noinspection PyUnresolvedReferences
 def validate_using_temporal(df, dataset_meta):
     # realiza validaciones usando el campo "temporal" de metadadta del dataset
     try:
@@ -180,6 +184,23 @@ def validate_missing_fields(df, distrib_meta):
                                                     distrib_meta['identifier'])
 
 
+def validate_df_shape(df, distrib_meta):
+    periodicity = None
+    for field in distrib_meta['field']:
+        if field.get('specialType') == 'time_index':
+            periodicity = field.get('specialTypeDetail')
+
+    freq = freq_iso_to_pandas(periodicity)
+    new_index = pd.date_range(df.index[0], df.index[-1], freq=freq)
+    columns = df.columns
+    data = np.array(df)
+    try:
+        pd.DataFrame(index=new_index, data=data, columns=columns)
+
+    except ValueError:
+        raise ce.DistributionBadDataError(distrib_meta['identifier'])
+
+
 def validate_distribution(df, catalog, dataset_meta, distrib_meta,
                           distribution_identifier):
 
@@ -194,7 +215,6 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     validate_title_length(df)
 
     # validaciones de índice de tiempo
-    validate_future_time(df)
     validate_using_temporal(df, dataset_meta)
 
     # validaciones de los valores de las series
@@ -202,3 +222,4 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     validate_values_are_numeric(df, distrib_meta)
     validate_field_few_values(df)
     validate_missing_values(df)
+    validate_df_shape(df, distrib_meta)

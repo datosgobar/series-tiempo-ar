@@ -197,3 +197,12 @@ class FieldMissingInDistrbutionError(ValueError):
             distribution
         )
         super(ValueError, self).__init__(msg)
+
+
+class DistributionBadDataError(ValueError):
+
+    def __init__(self, distribution):
+        msg = u"Set de datos erróneos en la distribución {}".format(
+            distribution
+        )
+        super(ValueError, self).__init__(msg)
