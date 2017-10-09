@@ -24,3 +24,16 @@ def freq_iso_to_pandas(freq_iso8601, how="start"):
         raise Exception(
             "{} no se reconoce para 'how': debe ser 'start' o 'end'".format(
                 how))
+
+
+def get_logger(name=__name__):
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    logging_formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(logging_formatter)
+    # logger.addHandler(ch)
+
+    return logger

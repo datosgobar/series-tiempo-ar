@@ -7,7 +7,7 @@ def get_time_series_distributions(catalog):
     """
     Devuelve las distribuciones que tengan un campo de series de tiempo
     Args:
-        catalog (str o dict): DataJson o string con ruta o URL a un data.json 
+        catalog (str o dict): DataJson o string con ruta o URL a un data.json
     Returns:
         list: lista de identifiers de las distribuciones
     """

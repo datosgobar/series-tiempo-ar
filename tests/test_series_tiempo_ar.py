@@ -23,5 +23,6 @@ class SeriesTiempoArTestCase(unittest.TestCase):
     def test_something(self):
         pass
 
+
 if __name__ == '__main__':
     nose.run(defaultTest=__name__)

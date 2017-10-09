@@ -17,8 +17,8 @@ with open("requirements_dev.txt") as f:
 
 setup(
     name='series-tiempo-ar',
-    version='0.1.0',
-    description="Módulos parpara extraer, transformar y analizar series de tiempo basados en el perfil de metadatos del Paquete de Apertura de Datos.",
+    version='0.0.1',
+    description="Módulos para extraer, analizar y compilar series de tiempo documentadas en catálogos de datos abiertos basados en el perfil de metadatos del Paquete de Apertura de Datos.",
     long_description=readme + '\n\n' + history,
     author="Datos Argentina",
     author_email='datos@modernizacion.gob.ar',
@@ -39,12 +39,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 2.7'
     ],
     test_suite='tests',
     tests_require=test_requirements

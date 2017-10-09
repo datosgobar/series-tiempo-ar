@@ -1,3 +1,4 @@
+
 # Series de Tiempo Argentina
 
 [![Coverage Status](https://coveralls.io/repos/github/datosgobar/series-tiempo-ar/badge.svg?branch=master)](https://coveralls.io/github/datosgobar/series-tiempo-ar?branch=master)
@@ -6,31 +7,57 @@
 [![Stories in Ready](https://badge.waffle.io/datosgobar/series-tiempo-ar.png?label=ready&title=Ready)](https://waffle.io/datosgobar/series-tiempo-ar)
 [![Documentation Status](http://readthedocs.org/projects/series-tiempo-ar/badge/?version=latest)](http://series-tiempo-ar.readthedocs.org/en/latest/?badge=latest)
 
-Módulos parpara extraer, transformar y analizar series de tiempo basados en el perfil de metadatos del Paquete de Apertura de Datos.
-
+Módulos para extraer, analizar y compilar series de tiempo documentadas en catálogos de datos abiertos basados en el perfil de metadatos del Paquete de Apertura de Datos.
 
 * Versión python: 2
 * Licencia: MIT license
 * Documentación: https://series-tiempo-ar.readthedocs.io
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Indice
+
+- [Series de Tiempo Argentina](#series-de-tiempo-argentina)
+  - [Instalación](#instalaci%C3%B3n)
+  - [Uso](#uso)
+  - [Tests](#tests)
+  - [Contacto](#contacto)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Instalación
 
-*AYUDA: ¿Qué dependencias del sistema son necesarias? ¿Tests/pruebas post instalación? Usar screenshots/gifs (si cabe).*
+* **Producción:** Desde cualquier parte
 
-* `cd path/to/series-tiempo-ar` y `pip install -e .` para instalar el repo clonado localmente en *modo developer* (cualquier cambio en el código está disponible en el entorno virtual donde fue instalado).
+```bash
+$ pip install series-tiempo-ar
+```
+
+* **Desarrollo:** Clonar este repositorio, y desde su raíz, ejecutar:
+```bash
+$ pip install -e .
+```
 
 ## Uso
 
-*AYUDA: Ejemplo rápido. Usar screenshots/gifs (si cabe).*
+*Este paquete todavía está en desarrollo incipiente y su funcionalidad no está documentada ni lista para ser distribuida.*
 
 ## Tests
 
-*AYUDA: ¿Cómo correr los tests? ¿Cómo me instalo dependencias para los tests?*
+Los tests se corren con `nose`. Desde la raíz del repositorio:
 
-## Créditos
+**Configuración inicial:**
 
-*AYUDA: ¿Usás código de otra persona/organización? ¿Alguien o algo fue una fuente de inspiración/asesoramiento/ayuda para este repositorio? ¿Es esto un fork?*
+```bash
+$ pip install -r requirements_dev.txt
+$ mkdir tests/temp
+```
+
+**Correr la suite de tests:**
+
+```bash
+$ nosetests
+```
 
 ## Contacto
 
