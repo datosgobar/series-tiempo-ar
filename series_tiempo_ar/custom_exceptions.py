@@ -206,3 +206,19 @@ class DistributionBadDataError(ValueError):
             distribution
         )
         super(ValueError, self).__init__(msg)
+
+
+class HeaderNotBlankOrIdError(ValueError):
+
+    def __init__(self, worksheet, header_coord, header_value, ws_header_value):
+        msg = "'{}' en hoja '{}' tiene '{}'. Debe ser vacio o '{}'".format(
+            header_coord, worksheet, ws_header_value, header_value)
+        super(HeaderNotBlankOrIdError, self).__init__(msg)
+
+
+class HeaderIdError(ValueError):
+
+    def __init__(self, worksheet, header_coord, header_value, ws_header_value):
+        msg = "'{}' en hoja '{}' tiene '{}'. Debe ser '{}'".format(
+            header_coord, worksheet, ws_header_value, header_value)
+        super(HeaderIdError, self).__init__(msg)
