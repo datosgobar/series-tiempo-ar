@@ -1,4 +1,5 @@
 #! coding: utf-8
+import logging
 
 
 def freq_iso_to_pandas(freq_iso8601, how="start"):

@@ -197,6 +197,16 @@ def validate_df_shape(df, distrib_meta):
         pd.DataFrame(index=new_index, data=data, columns=columns)
 
     except ValueError:
+        if freq == 'D':
+            freq = 'B'
+            new_index = pd.date_range(df.index[0], df.index[-1], freq=freq)
+            try:
+                pd.DataFrame(index=new_index, data=data, columns=columns)
+                return
+
+            except ValueError:
+                pass
+
         raise ce.DistributionBadDataError(distrib_meta['identifier'])
 
 
@@ -223,8 +233,7 @@ def validate_header_cell_field_id_or_blank(
                 worksheet, header_coord, header_value, ws_header_value)
 
 
-def validate_distribution(df, catalog, dataset_meta, distrib_meta,
-                          distribution_identifier):
+def validate_distribution(df, catalog, dataset_meta, distrib_meta):
 
     # validaciones sólo de metadatos
     validate_field_id(distrib_meta)

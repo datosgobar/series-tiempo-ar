@@ -1,0 +1,167 @@
+{
+  "dataset": [
+    {
+      "publisher": {
+        "mbox": "ausolari@mecon.gob.ar",
+        "name": "Ministerio de Hacienda. Secretaría de Política Económica. Subsecretaría de Programación Macroeconómica."
+      },
+      "landingPage": "https://www.minhacienda.gob.ar/secretarias/politica-economica/programacion-macroeconomica/",
+      "description": "Cotizaciones de divisas de algunos países. Con respecto al dólar de Estados Unidos - Frecuencia Diaria. Promedio Mensual, Trimestral y Anual.",
+      "superTheme": [
+        "ECON"
+      ],
+      "title": "Cotizaciones de divisas internacionales",
+      "language": [
+        "SPA"
+      ],
+      "issued": "2017-09-28T00:00:00",
+      "temporal": "2000-01-01/2017-07-20",
+      "modified": "2017-09-28T00:00:00",
+      "source": "Bloomberg",
+      "theme": [
+        "Divisas Internacionales"
+      ],
+      "keyword": [
+        "Información económica al día",
+        "Internacional"
+      ],
+      "accrualPeriodicity": "R/P1D",
+      "spatial": "ARG",
+      "identifier": "133",
+      "contactPoint": {
+        "fn": "Ministerio de Hacienda. Secretaría de Política Económica. Subsecretaría de Programación Macroeconómica. Dirección de Información y Coyuntura"
+      },
+      "accessLevel": "ABIERTO",
+      "distribution": [
+        {
+          "accessURL": "https://www.minhacienda.gob.ar/secretarias/politica-economica/programacion-macroeconomica/",
+          "scrapingFileSheet": "7 divisas",
+          "description": "Rendimiento de los bonos de Estados Unidos - Tasas en Porcentaje - Frecuencia Diaria",
+          "format": "CSV",
+          "dataset_identifier": "133",
+          "issued": "2017-09-28T00:00:00",
+          "title": "Cotizaciones respecto al dólar de Estados Unidos. Valores Diarios.",
+          "modified": "2017-09-28T00:00:00",
+          "fileName": "cotizaciones-divisas-algunos-paises-con-respecto-al-dolar-estados-unidos-frecuencia-diaria.csv",
+          "downloadURL": "tests/samples/data_business_days.csv",
+          "field": [
+            {
+              "distribution_identifier": "133.1",
+              "title": "indice_tiempo",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "A487",
+              "specialTypeDetail": "R/P1D",
+              "specialType": "time_index",
+              "type": "date",
+              "id": "133.1_IT_0_0_13",
+              "scrapingDataStartCell": "A488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Peso argentino",
+              "title": "peso_argentino",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "C487",
+              "units": "Pesos argentinos por dólar",
+              "type": "number",
+              "id": "133.1_PA_0_0_14",
+              "scrapingDataStartCell": "C488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Yen japonés",
+              "title": "yen_japones",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "D487",
+              "units": "Yenes por dólar",
+              "type": "number",
+              "id": "133.1_YJ_0_0_11",
+              "scrapingDataStartCell": "D488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "EURO",
+              "title": "euro",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "E487",
+              "units": "Euros por dólar",
+              "type": "number",
+              "id": "133.1_E_0_0_4",
+              "scrapingDataStartCell": "E488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Real brasileño",
+              "title": "real_brasilenio",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "F487",
+              "units": "Reales por dólar",
+              "type": "number",
+              "id": "133.1_RB_0_0_15",
+              "scrapingDataStartCell": "F488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Peso mejicano",
+              "title": "peso_mejicano",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "G487",
+              "units": "Pesos mexicanos por dólar",
+              "type": "number",
+              "id": "133.1_PM_0_0_13",
+              "scrapingDataStartCell": "G488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Peso chileno",
+              "title": "peso_chileno",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "H487",
+              "units": "Pesos chilenos por dólar",
+              "type": "number",
+              "id": "133.1_PC_0_0_12",
+              "scrapingDataStartCell": "H488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Peso uruguayo",
+              "title": "peso_uruguayo",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "I487",
+              "units": "Pesos uruguayos por dólar",
+              "type": "number",
+              "id": "133.1_PU_0_0_13",
+              "scrapingDataStartCell": "I488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Libra Esterlina",
+              "title": "libra_esterlina",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "J487",
+              "units": "Libras esterlinas por dólar",
+              "type": "number",
+              "id": "133.1_LE_0_0_15",
+              "scrapingDataStartCell": "J488"
+            },
+            {
+              "distribution_identifier": "133.1",
+              "description": "Yuan",
+              "title": "yuan",
+              "dataset_identifier": "133",
+              "scrapingIdentifierCell": "K487",
+              "units": "Yuanes por dólar",
+              "type": "number",
+              "id": "133.1_Y_0_0_4",
+              "scrapingDataStartCell": "K488"
+            }
+          ],
+          "draft": false,
+          "units": "Con respecto al dólar de Estados Unidos",
+          "identifier": "133.1",
+          "scrapingFileURL": "https://www.mecon.gov.ar/download/infoeco/internacional_ied.xlsx"
+        }
+      ]
+    }
+  ]
+}
