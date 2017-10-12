@@ -253,7 +253,7 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta):
     validate_values_are_numeric(df, distrib_meta)
     validate_field_few_values(df)
     validate_missing_values(df)
-    # validate_df_shape(df, distrib_meta)
+    validate_df_shape(df, distrib_meta)
 
 
 def validate_distribution_scraping(
