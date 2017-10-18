@@ -17,7 +17,7 @@ import custom_exceptions as ce
 from helpers import freq_iso_to_pandas
 
 MINIMUM_VALUES = 2
-MAX_MISSING_PROPORTION = 0.99
+MAX_MISSING_PROPORTION = 0.999
 MIN_TEMPORAL_FRACTION = 10
 MAX_FIELD_TITLE_LEN = 60
 
@@ -233,7 +233,8 @@ def validate_header_cell_field_id_or_blank(
                 worksheet, header_coord, header_value, ws_header_value)
 
 
-def validate_distribution(df, catalog, dataset_meta, distrib_meta):
+def validate_distribution(df, catalog, dataset_meta, distrib_meta,
+                          exceptions=None):
 
     # validaciones sólo de metadatos
     validate_field_id(distrib_meta)
