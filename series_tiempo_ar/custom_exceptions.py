@@ -201,9 +201,11 @@ class FieldMissingInDistrbutionError(ValueError):
 
 class DistributionBadDataError(ValueError):
 
-    def __init__(self, distribution):
-        msg = u"Set de datos erróneos en la distribución {}".format(
-            distribution
+    def __init__(self, distribution_id, time_index_ini, time_index_end,
+                 timie_index_freq, time_index_size, values_size):
+        msg = u"Datos inconsistentes en la distribución {}: Comienzo '{}' / Fin '{}' / Frecuencia '{}' / Fechas '{}' / Valores '{}'".format(
+            distribution_id, time_index_ini, time_index_end,
+            timie_index_freq, time_index_size, values_size
         )
         super(ValueError, self).__init__(msg)
 

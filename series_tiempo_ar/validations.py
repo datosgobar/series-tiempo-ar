@@ -207,7 +207,11 @@ def validate_df_shape(df, distrib_meta):
             except ValueError:
                 pass
 
-        raise ce.DistributionBadDataError(distrib_meta['identifier'])
+        raise ce.DistributionBadDataError(
+            distrib_meta['identifier'],
+            df.index[0], df.index[-1], periodicity,
+            len(new_index), len(data)
+        )
 
 
 def validate_header_cell_field_id(xl, worksheet, headers_coord, headers_value):
