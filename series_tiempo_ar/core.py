@@ -3,7 +3,17 @@
 
 """Módulo principal de series-tiempo-ar
 
-Contiene una extensión del objeto DataJson para catálogos con series de tiempo.
+Contiene una extensión del objeto pydatajson.DataJson con funcionalidades
+adicionales para el manejo de datos y metadatos de catálogos con series de
+tiempo.
+
+Esta extensión está orientada a proveer una capa de abstracción que facilite:
+
+    1. La implementación sistemática de rutinas de ETL para la compilación de
+        series de tiempo desde fuentes semi-estructuradas.
+    2. La validación y utilización programática de series de tiempo publicadas
+        según la especificación del Perfil de Metadatos de la Política de
+        Apertura de Datos de la Administración Pública Nacional de Argentina.
 """
 
 from __future__ import unicode_literals
