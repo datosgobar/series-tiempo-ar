@@ -237,6 +237,22 @@ def validate_header_cell_field_id_or_blank(
                 worksheet, header_coord, header_value, ws_header_value)
 
 
+def validate_no_repeated_fields_in_distribution(distrib_meta):
+    """Verifica que los ID de los fields no estén repetidos dentro de
+    la misma distribución
+    """
+    fields = set()
+    for field in distrib_meta.get('field'):
+        _id = field.get('id')
+        if not _id:
+            continue
+
+        if field.get('id') in fields:
+            raise ce.FieldIdRepetitionError(repeated_fields=_id)
+
+        fields.add(_id)
+
+
 def validate_distribution(df, catalog, dataset_meta, distrib_meta,
                           exceptions=None):
 
@@ -245,6 +261,7 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     validate_no_repeated_fields(catalog, distrib_meta)
     validate_no_repeated_titles(distrib_meta)
     validate_no_repeated_descriptions(distrib_meta)
+    validate_no_repeated_fields_in_distribution(distrib_meta)
 
     # validaciones de headers
     validate_field_title(df)

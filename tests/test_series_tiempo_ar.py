@@ -12,8 +12,10 @@ import unittest
 import nose
 
 import pandas as pd
+from nose.tools import raises
 from pydatajson import DataJson
 from series_tiempo_ar.validations import validate_distribution
+import series_tiempo_ar.custom_exceptions as ce
 
 
 class SeriesTiempoArTestCase(unittest.TestCase):
@@ -53,6 +55,20 @@ class SeriesTiempoArTestCase(unittest.TestCase):
 
         validate_distribution(df, catalog, dataset, distribution)
 
+    @raises(ce.FieldIdRepetitionError)
+    def test_repeated_field_id(self):
+        catalog = os.path.join(self.SAMPLES_DIR, 'repeated_field_id.json')
+        catalog = DataJson(catalog)
+        identifier = "125.1"
+        distribution = catalog.get_distribution(identifier=identifier)
+        dataset = catalog.get_dataset(
+            identifier=distribution['dataset_identifier'])
+
+        df = pd.read_csv(distribution['downloadURL'],
+                         parse_dates=['indice_tiempo']) \
+            .set_index('indice_tiempo')
+
+        validate_distribution(df, catalog, dataset, distribution)
 
 if __name__ == '__main__':
     nose.run(defaultTest=__name__)
