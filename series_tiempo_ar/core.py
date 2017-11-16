@@ -25,6 +25,9 @@ import pandas as pd
 from pydatajson import DataJson
 
 from helpers import get_logger
+from paths import SCHEMAS_DIR
+
+DEFAULT_CATALOG_SCHEMA_FILENAME = "catalog.json"
 
 
 class TimeSeriesDataJson(DataJson):
@@ -32,6 +35,9 @@ class TimeSeriesDataJson(DataJson):
 
     def __init__(self, catalog=None, schema_filename=None, schema_dir=None,
                  default_values=None):
+        schema_filename = schema_filename or DEFAULT_CATALOG_SCHEMA_FILENAME
+        schema_dir = schema_dir or SCHEMAS_DIR
+
         super(TimeSeriesDataJson, self).__init__(
             catalog=catalog, schema_filename=schema_filename,
             schema_dir=schema_dir, default_values=default_values
