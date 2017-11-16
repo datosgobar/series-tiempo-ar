@@ -30,4 +30,9 @@ from helpers import get_logger
 class TimeSeriesDataJson(DataJson):
     """Métodos para trabajar con catálogos de series de tiempo en data.json."""
 
-    pass
+    def __init__(self, catalog=None, schema_filename=None, schema_dir=None,
+                 default_values=None):
+        super(TimeSeriesDataJson, self).__init__(
+            catalog=catalog, schema_filename=schema_filename,
+            schema_dir=schema_dir, default_values=default_values
+        )
