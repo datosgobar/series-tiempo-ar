@@ -25,7 +25,7 @@ BACKUP_DUMP_DIR = os.path.join(DATOS_DIR, "backup", "dump")
 SERIES_DIR = os.path.join(DATOS_DIR, "output", "series")
 REPORTES_DIR = os.path.join(DATOS_DIR, "reports")
 CODIGO_DIR = os.path.join(PROJECT_DIR, "scripts")
-SCHEMAS_DIR = os.path.join(PROJECT_DIR, "schemas")
+SCHEMAS_DIR = os.path.join(PROJECT_DIR, "series_tiempo_ar", "schemas")
 
 
 def get_distribution_path(catalog_id, dataset_id, distribution_id,
