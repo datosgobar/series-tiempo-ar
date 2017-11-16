@@ -16,6 +16,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(
 # directorios del repositorio
 LOGS_DIR = os.path.join(PROJECT_DIR, "logs")
 DATOS_DIR = os.path.join(PROJECT_DIR, "data")
+CATALOGS_DIR = os.path.join(PROJECT_DIR, "data", "output", "catalog")
 CATALOGS_DIR_INPUT = os.path.join(DATOS_DIR, "input")
 TEST_CATALOGS_DIR = os.path.join(DATOS_DIR, "tests")
 DUMPS_DIR = os.path.join(DATOS_DIR, "output", "dump")
@@ -24,7 +25,7 @@ BACKUP_DUMP_DIR = os.path.join(DATOS_DIR, "backup", "dump")
 SERIES_DIR = os.path.join(DATOS_DIR, "output", "series")
 REPORTES_DIR = os.path.join(DATOS_DIR, "reports")
 CODIGO_DIR = os.path.join(PROJECT_DIR, "scripts")
-SCHEMAS_DIR = os.path.join(PROJECT_DIR, "scripts", "schemas")
+SCHEMAS_DIR = os.path.join(PROJECT_DIR, "schemas")
 
 
 def get_distribution_path(catalog_id, dataset_id, distribution_id,
