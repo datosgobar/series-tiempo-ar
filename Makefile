@@ -51,16 +51,16 @@ lint: ## check style with flake8
 	flake8 series_tiempo_ar tests
 
 test: ## run tests quickly with the default Python
-	
+
 		python setup.py test
 
 test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	
+
 		coverage run --source series_tiempo_ar setup.py test
-	
+
 		coverage report -m
 		coverage html
 		$(BROWSER) htmlcov/index.html
@@ -98,3 +98,4 @@ pypi: ## register the package to PyPi get travis ready to deploy to pip
 doctoc: ## generate table of contents, doctoc command line tool required
         ## https://github.com/thlorenz/doctoc
 	doctoc --title "## Indice" README.md
+	bash fix_github_links.sh README.md
