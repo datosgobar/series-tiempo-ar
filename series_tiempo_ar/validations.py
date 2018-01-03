@@ -13,8 +13,8 @@ import string
 from pandas.api.types import is_numeric_dtype
 from dateutil.parser import parse as parse_time
 
-import custom_exceptions as ce
-from helpers import freq_iso_to_pandas
+import series_tiempo_ar.custom_exceptions as ce
+from .helpers import freq_iso_to_pandas
 
 MINIMUM_VALUES = 2
 MAX_MISSING_PROPORTION = 0.999

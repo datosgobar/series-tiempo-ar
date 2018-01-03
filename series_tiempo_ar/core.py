@@ -24,8 +24,8 @@ import pandas as pd
 
 from pydatajson import DataJson
 
-from helpers import get_logger
-from paths import SCHEMAS_DIR
+from .helpers import get_logger
+from .paths import SCHEMAS_DIR
 
 DEFAULT_CATALOG_SCHEMA_FILENAME = "catalog.json"
 
