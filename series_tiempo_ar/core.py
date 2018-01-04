@@ -19,12 +19,9 @@ Esta extensión está orientada a proveer una capa de abstracción que facilite:
 from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import with_statement
-import os
-import pandas as pd
 
 from pydatajson import DataJson
 
-from .helpers import get_logger
 from .paths import SCHEMAS_DIR
 
 DEFAULT_CATALOG_SCHEMA_FILENAME = "catalog.json"

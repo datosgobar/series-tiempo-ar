@@ -154,9 +154,9 @@ class DatasetIdRepetitionError(BaseRepetitionError):
 
 class BaseNonExistentError(ValueError):
 
-    """El id de una entidad no existe en el catálogo."""
-
-    def get_msg(self, entity_name, entity_type, entity_id):
+    @staticmethod
+    def get_msg(entity_name, entity_type, entity_id):
+        """El id de una entidad no existe en el catálogo."""
         return "No hay ningun {} con {} {}".format(
             entity_name, entity_type, entity_id)
 
@@ -203,7 +203,9 @@ class DistributionBadDataError(ValueError):
 
     def __init__(self, distribution_id, time_index_ini, time_index_end,
                  timie_index_freq, time_index_size, values_size):
-        msg = u"Datos inconsistentes en la distribución {}: Comienzo '{}' / Fin '{}' / Frecuencia '{}' / Fechas '{}' / Valores '{}'".format(
+        msg = u"Datos inconsistentes en la distribución {}: " \
+              u"Comienzo '{}' / Fin '{}' / Frecuencia '{}' / Fechas '{}' / Valores '{}'"
+        msg = msg.format(
             distribution_id, time_index_ini, time_index_end,
             timie_index_freq, time_index_size, values_size
         )

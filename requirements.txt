@@ -2,3 +2,4 @@ arrow
 pandas
 python-dateutil
 pydatajson>=0.3.0
+six
