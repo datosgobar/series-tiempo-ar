@@ -253,6 +253,15 @@ def validate_no_repeated_fields_in_distribution(distrib_meta):
         fields.add(_id)
 
 
+def validate_distinct_scraping_start_cells(distrib_meta):
+    for field in distrib_meta.get("field"):
+        if field.get("scrapingIdentifierCell") == field.get("scrapingDataStartCell"):
+            raise ce.ScrapingStartCellsIdenticalError(
+                field.get("scrapingIdentifierCell"),
+                field.get("scrapingDataStartCell")
+            )
+
+
 def validate_distribution(df, catalog, dataset_meta, distrib_meta,
                           exceptions=None):
 
@@ -279,7 +288,8 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
 
 
 def validate_distribution_scraping(
-        xl, worksheet, headers_coord, headers_value, force_ids=True):
+        xl, worksheet, headers_coord, headers_value, distrib_meta,
+        force_ids=True):
 
     if force_ids:
         validate_header_cell_field_id(
@@ -287,3 +297,5 @@ def validate_distribution_scraping(
     else:
         validate_header_cell_field_id_or_blank(
             xl, worksheet, headers_coord, headers_value)
+
+    validate_distinct_scraping_start_cells(distrib_meta)

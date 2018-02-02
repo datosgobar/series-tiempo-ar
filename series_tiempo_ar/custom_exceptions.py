@@ -224,3 +224,13 @@ class HeaderIdError(ValueError):
         msg = "'{}' en hoja '{}' tiene '{}'. Debe ser '{}'".format(
             header_coord, worksheet, ws_header_value, header_value)
         super(HeaderIdError, self).__init__(msg)
+
+
+class ScrapingStartCellsIdenticalError(ValueError):
+
+    def __init__(self, scrapingIdentifierCell, scrapingDataStartCell):
+        msg = u"scrapingIdentifierCell ({}) es igual a scrapingDataStartCell ({})".format(
+            scrapingIdentifierCell,
+            scrapingDataStartCell
+        )
+        super(ValueError, self).__init__(msg)
