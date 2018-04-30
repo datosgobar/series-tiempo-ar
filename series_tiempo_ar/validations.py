@@ -10,11 +10,12 @@ import pandas as pd
 import numpy as np
 import arrow
 import string
+from six import text_type
 from pandas.api.types import is_numeric_dtype
 from dateutil.parser import parse as parse_time
 
-import custom_exceptions as ce
-from helpers import freq_iso_to_pandas
+import series_tiempo_ar.custom_exceptions as ce
+from .helpers import freq_iso_to_pandas
 
 MINIMUM_VALUES = 2
 MAX_MISSING_PROPORTION = 0.999
@@ -230,7 +231,7 @@ def validate_header_cell_field_id_or_blank(
         ws_header_value = xl.wb[worksheet][header_coord].value
         if (
             ws_header_value and
-            len(unicode(ws_header_value).strip()) > 0 and
+            len(text_type(ws_header_value).strip()) > 0 and
             ws_header_value != header_value
         ):
             raise ce.HeaderNotBlankOrIdError(
@@ -253,8 +254,17 @@ def validate_no_repeated_fields_in_distribution(distrib_meta):
         fields.add(_id)
 
 
+def validate_distinct_scraping_start_cells(distrib_meta):
+    for field in distrib_meta.get("field"):
+        if field.get("scrapingIdentifierCell") == field.get("scrapingDataStartCell"):
+            raise ce.ScrapingStartCellsIdenticalError(
+                field.get("scrapingIdentifierCell"),
+                field.get("scrapingDataStartCell")
+            )
+
+
 def validate_distribution(df, catalog, dataset_meta, distrib_meta,
-                          exceptions=None):
+                          _=None):
 
     # validaciones sólo de metadatos
     validate_field_id(distrib_meta)
@@ -279,7 +289,8 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
 
 
 def validate_distribution_scraping(
-        xl, worksheet, headers_coord, headers_value, force_ids=True):
+        xl, worksheet, headers_coord, headers_value, distrib_meta,
+        force_ids=True):
 
     if force_ids:
         validate_header_cell_field_id(
@@ -287,3 +298,5 @@ def validate_distribution_scraping(
     else:
         validate_header_cell_field_id_or_blank(
             xl, worksheet, headers_coord, headers_value)
+
+    validate_distinct_scraping_start_cells(distrib_meta)

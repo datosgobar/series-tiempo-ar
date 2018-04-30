@@ -2,6 +2,6 @@
 
 __author__ = """Datos Argentina"""
 __email__ = 'datos@modernizacion.gob.ar'
-__version__ = '0.0.5'
+__version__ = '0.1.0'
 
 from .core import TimeSeriesDataJson

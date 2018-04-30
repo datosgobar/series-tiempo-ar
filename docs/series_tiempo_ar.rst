@@ -4,6 +4,14 @@ series_tiempo_ar package
 Submodules
 ----------
 
+series_tiempo_ar.core module
+----------------------------
+
+.. automodule:: series_tiempo_ar.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 series_tiempo_ar.custom_exceptions module
 -----------------------------------------
 
@@ -20,18 +28,18 @@ series_tiempo_ar.helpers module
     :undoc-members:
     :show-inheritance:
 
-series_tiempo_ar.search module
-------------------------------
+series_tiempo_ar.paths module
+-----------------------------
 
-.. automodule:: series_tiempo_ar.search
+.. automodule:: series_tiempo_ar.paths
     :members:
     :undoc-members:
     :show-inheritance:
 
-series_tiempo_ar.series_tiempo_ar module
-----------------------------------------
+series_tiempo_ar.search module
+------------------------------
 
-.. automodule:: series_tiempo_ar.series_tiempo_ar
+.. automodule:: series_tiempo_ar.search
     :members:
     :undoc-members:
     :show-inheritance:
