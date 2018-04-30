@@ -1,6 +1,11 @@
 Versiones
 ===
 
+0.1.2 (2018-04-30)
+------------------
+
+* El campo `temporal` en dataset pasa a ser de uso opcional.
+
 0.1.0 (2018-04-17)
 ------------------
 
