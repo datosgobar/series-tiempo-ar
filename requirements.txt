@@ -1,4 +1,4 @@
 arrow
 pandas
 python-dateutil
-pydatajson>=0.3.0
+pydatajson>=0.4.11
