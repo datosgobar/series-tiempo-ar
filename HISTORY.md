@@ -1,7 +1,7 @@
 Versiones
 ===
 
-0.1.2 (2018-05-04)
+0.1.3 (2018-05-04)
 ------------------
 
 * Actualiza las validaciones al schema de la versión 0.4.12 de pydatajson
