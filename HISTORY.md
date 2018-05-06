@@ -1,6 +1,11 @@
 Versiones
 ===
 
+0.1.4 (2018-05-06)
+------------------
+
+* Flexibiliza la restricción de series demasiado cortas: ahora se admite hasta un 2% del total de las series de una distribución con una cantidad demasiado baja de valores para ser una serie.
+
 0.1.3 (2018-05-04)
 ------------------
 

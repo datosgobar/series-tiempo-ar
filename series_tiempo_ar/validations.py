@@ -19,6 +19,7 @@ from .helpers import freq_iso_to_pandas
 
 MINIMUM_VALUES = 2
 MAX_MISSING_PROPORTION = 0.999
+MAX_TOO_SMALL_PROPORTION = 0.02
 MIN_TEMPORAL_FRACTION = 10
 MAX_FIELD_TITLE_LEN = 60
 
@@ -42,10 +43,19 @@ def validate_future_time(df):
 
 
 def validate_field_few_values(df):
-    # Las series deben tener una cantidad mínima de valores
+    # La mayoría de las series de una distrib. deben tener un mínimo de valores
+    series_too_small = 0
+    series_total = len(df.columns) - 1
+
     for field in df.columns:
         positive_values = len(df[field][df[field].notnull()])
+
+        # se suma una nueva serie demasiado corta
         if not positive_values >= MINIMUM_VALUES:
+            count_too_small += 1
+
+        # chequea si hay demasiadas series cortas
+        if float(count_too_small) / series_total > MAX_TOO_SMALL_PROPORTION:
             raise ce.FieldFewValuesError(
                 field, positive_values, MINIMUM_VALUES
             )
