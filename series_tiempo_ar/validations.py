@@ -52,10 +52,10 @@ def validate_field_few_values(df):
 
         # se suma una nueva serie demasiado corta
         if not positive_values >= MINIMUM_VALUES:
-            count_too_small += 1
+            series_too_small += 1
 
         # chequea si hay demasiadas series cortas
-        if float(count_too_small) / series_total > MAX_TOO_SMALL_PROPORTION:
+        if float(series_too_small) / series_total > MAX_TOO_SMALL_PROPORTION:
             raise ce.FieldFewValuesError(
                 field, positive_values, MINIMUM_VALUES
             )
