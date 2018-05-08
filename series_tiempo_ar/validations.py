@@ -45,7 +45,7 @@ def validate_future_time(df):
 def validate_field_few_values(df):
     # La mayoría de las series de una distrib. deben tener un mínimo de valores
     series_too_small = 0
-    series_total = len(df.columns) - 1
+    series_total = len(df.columns)
 
     for field in df.columns:
         positive_values = len(df[field][df[field].notnull()])
