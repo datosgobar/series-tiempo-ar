@@ -23,6 +23,7 @@ from __future__ import with_statement
 from pydatajson import DataJson
 
 from .paths import SCHEMAS_DIR
+from . import readers
 
 DEFAULT_CATALOG_SCHEMA_FILENAME = "catalog.json"
 
@@ -39,3 +40,5 @@ class TimeSeriesDataJson(DataJson):
             catalog=catalog, schema_filename=schema_filename,
             schema_dir=schema_dir, default_values=default_values
         )
+
+    load_ts_distribution = readers.load_ts_distribution

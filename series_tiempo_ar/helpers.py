@@ -1,5 +1,7 @@
 #! coding: utf-8
 import logging
+import chardet
+import csv
 
 
 def freq_iso_to_pandas(freq_iso8601, how="start"):
@@ -38,3 +40,40 @@ def get_logger(name=__name__):
     # logger.addHandler(ch)
 
     return logger
+
+
+def find_encoding(f_path):
+    """Identifica el encoding en un archivo CSV.
+
+    Args:
+        f_path (str): Path al archivo
+
+    Returns:
+        str: Encoding o mensaje 'no identificado'
+    """
+    r_file = open(f_path, 'rb').read()
+    try:
+        encoding = chardet.detect(r_file)['encoding']
+        print("Encoding estimado automáticamente: {}".format(encoding))
+        return encoding
+    except Exception:
+        print("Encoding no pudo ser estimado automáticamente")
+        return None
+
+
+def find_dialect(f_path):
+    """Identifica el dialecto de un archivo CSV (caracter delimitador de campos
+     y de texto).
+
+    Args:
+        f_path (str): Path al archivo
+
+    Returns:
+        tuple: Caracter delimitador de campos y caracter delimitador de texto,
+    """
+    with open(f_path, 'rb') as csvfile:
+        line = csvfile.readline().decode('utf-8', errors='ignore')
+        dialect = csv.Sniffer().sniff(line)
+        print('Detección automática separador ("{}") y comillas ("{}")'.format(
+            dialect.delimiter, dialect.quotechar))
+        return dialect.delimiter, dialect.quotechar
