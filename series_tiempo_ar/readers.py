@@ -13,6 +13,7 @@ from __future__ import print_function
 from __future__ import with_statement
 import os
 import pandas as pd
+import arrow
 
 from helpers import freq_iso_to_pandas, find_encoding, find_dialect
 from pydatajson.time_series import get_distribution_time_index
@@ -43,7 +44,7 @@ def load_ts_distribution(catalog, identifier, catalog_id=None,
     # se lee a partir de un CSV que cumple con la especificación
     elif is_csv_file or method == "csv_file":
         file_source = file_source or distribution["downloadURL"]
-        time_index = get_distribution_time_index(distrib_meta)
+        time_index = get_distribution_time_index(distribution)
         return pd.read_csv(
             file_source, index_col=time_index,
             parse_dates=[time_index],
