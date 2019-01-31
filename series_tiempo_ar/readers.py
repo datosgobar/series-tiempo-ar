@@ -82,12 +82,12 @@ def get_ts_distributions_by_method(catalog, method=None):
 def get_distribution_generation_method(distribution):
     # se genera a partir de un archivo de texto con parámetros
     if not distribution.get("downloadURL") and _is_text_file(
-            distribution["scrapingFileURL"]):
+            distribution.get("scrapingFileURL")):
         return "text_file"
 
     # se scrapea a partir de un Excel con parámetros (usando otro proyecto)
     elif (not distribution.get("downloadURL") and
-          _is_excel_file(distribution["scrapingFileURL"])):
+          _is_excel_file(distribution.get("scrapingFileURL"))):
         return "excel_file"
 
     # se lee a partir de un CSV que cumple con la especificación
@@ -100,11 +100,15 @@ def get_distribution_generation_method(distribution):
 
 
 def _is_text_file(path_or_url):
+    if not path_or_url:
+        return False
     extension = path_or_url.split(".")[-1].lower()
     return extension in ["txt", "csv"]
 
 
 def _is_excel_file(path_or_url):
+    if not path_or_url:
+        return False
     extension = path_or_url.split(".")[-1].lower()
     return extension in ["xls", "xlsx"]
 

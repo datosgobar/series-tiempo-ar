@@ -41,4 +41,6 @@ class TimeSeriesDataJson(DataJson):
             schema_dir=schema_dir, default_values=default_values
         )
 
+        self.generate_distribution_ids()
+
     load_ts_distribution = readers.load_ts_distribution
