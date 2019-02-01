@@ -15,7 +15,7 @@ import os
 import pandas as pd
 import arrow
 
-from helpers import freq_iso_to_pandas, find_encoding, find_dialect
+from .helpers import freq_iso_to_pandas, find_encoding, find_dialect
 from pydatajson.time_series import get_distribution_time_index
 
 
