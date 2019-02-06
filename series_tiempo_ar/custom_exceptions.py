@@ -236,3 +236,11 @@ class ScrapingStartCellsIdenticalError(ValueError):
             scrapingDataStartCell
         )
         super(ValueError, self).__init__(msg)
+
+
+class DistributionTooManyNullSeriesError(Exception):
+    def __init__(self, distribution, max_allowed_proportion, null_proportion):
+        msg = "Proporción de series nulas en distribución {} por encima del umbral permitido ({}): {}".format(
+            distribution, max_allowed_proportion, null_proportion
+        )
+        super(DistributionTooManyNullSeriesError, self).__init__(msg)
