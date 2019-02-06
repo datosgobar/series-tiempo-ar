@@ -16,6 +16,7 @@ import pandas as pd
 import arrow
 
 from .helpers import freq_iso_to_pandas, find_encoding, find_dialect
+from .helpers import fix_time_index
 from pydatajson.time_series import get_distribution_time_index
 
 
@@ -228,7 +229,11 @@ def get_series_df_from_panel(
 
         values = list(df[df[series_id_field] == serie_id][values_field])
 
-        return pd.Series(index=time_index, data=values)
+        time_index, values = fix_time_index(
+            time_index, values,
+            freq_iso_to_pandas(time_index_freq, "end"))
+
+        return pd.Series(index=pd.to_datetime(time_index), data=values)
 
     data = {
         series[serie_id]: get_single_series(serie_id)

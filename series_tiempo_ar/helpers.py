@@ -2,6 +2,119 @@
 import logging
 import chardet
 import csv
+import arrow
+from copy import deepcopy
+import pandas as pd
+
+
+def parse_time_value(value, frequency):
+    """Lee una fecha según su frecuencia."""
+
+    if frequency == "A":
+        return arrow.get(value).replace(day=1).replace(month=1)
+    elif (frequency == "6M" or frequency == "Q" or frequency == "M"):
+        return arrow.get(value).replace(day=1)
+    else:
+        return arrow.get(value)
+
+
+def increment_period(value, periods, frequency):
+    """Incrementa una fecha en X períodos, según su frecuencia."""
+
+    if frequency == "A":
+        return value.replace(years=+periods)
+    elif frequency == "6M":
+        return value.replace(months=+(6 * periods))
+    elif frequency == "Q":
+        return value.replace(months=+(3 * periods))
+    elif frequency == "M":
+        return value.replace(months=+periods)
+    elif frequency == "D":
+        return value.replace(days=+periods)
+    else:
+        raise Exception("No se reconoce la frecuencia {}".format(frequency))
+
+
+def fix_time_index(time_values, values, frequency):
+    """Toma lista de fechas y valores, para arreglar índice según frec."""
+
+    new_time_values = []
+    new_values = []
+
+    previous_time_value = None
+    previous_value = None
+
+    current_time_value = None
+    current_value = None
+
+    for next_time_value, next_value in zip(list(time_values), list(values)):
+        next_time_value = parse_time_value(next_time_value, frequency)
+
+        # cuando empieza a iterar, todavía no tiene valores anteriores
+        if not current_time_value:
+            current_time_value = deepcopy(next_time_value)
+            current_value = deepcopy(next_value)
+
+            new_time_values.append(deepcopy(current_time_value))
+            new_values.append(deepcopy(current_value))
+
+        # cuando empieza a iterar, todavía no tiene valores anteriores
+        elif not previous_time_value:
+            previous_time_value = deepcopy(current_time_value)
+            previous_value = deepcopy(current_value)
+            current_time_value = deepcopy(next_time_value)
+            current_value = deepcopy(next_value)
+
+        # cuando tiene valores anteriores, comienza a buscar errores
+        # corregibles
+        else:
+            expected_current = increment_period(
+                previous_time_value, 1, frequency)
+            expected_next = increment_period(previous_time_value, 2, frequency)
+
+            # arregla período incorrecto, si anterior y siguiente son correctos
+            if (
+                (current_time_value != expected_current) and
+                (next_time_value == expected_next)
+            ):
+                current_time_value = deepcopy(expected_current)
+
+            elif (
+                (current_time_value > expected_current) and
+                (next_time_value > expected_next)
+            ):
+                # agrega todos los missings faltantes en el índice
+                while current_time_value > expected_current:
+                    new_time_values.append(deepcopy(expected_current))
+                    new_values.append(pd.np.nan)
+
+                    previous_time_value = increment_period(
+                        previous_time_value, 1, frequency)
+                    previous_value = pd.np.nan
+
+                    expected_current = increment_period(
+                        expected_current, 1, frequency)
+                    expected_next = increment_period(
+                        expected_next, 1, frequency)
+
+            # agrega a la lista el nuevo valor, una vez corregido
+            new_time_values.append(deepcopy(current_time_value))
+            new_values.append(deepcopy(current_value))
+
+            # incrementa los valores anteriores, para la próxima iteración
+            previous_time_value = deepcopy(current_time_value)
+            previous_value = deepcopy(current_value)
+            current_time_value = deepcopy(next_time_value)
+            current_value = deepcopy(next_value)
+
+    # agrega el último valor, después de las iteraciones
+    new_time_values.append(deepcopy(next_time_value))
+    new_values.append(deepcopy(next_value))
+
+    new_time_values_str = [
+        value.format("YYYY-MM-DD") for value in new_time_values]
+
+    return new_time_values_str, new_values
 
 
 def freq_iso_to_pandas(freq_iso8601, how="start"):
