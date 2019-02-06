@@ -13,3 +13,4 @@ recommonmark==0.4.0
 twine
 sphinx_rtd_theme
 sphinxcontrib-napoleon
+nose

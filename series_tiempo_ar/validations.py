@@ -22,6 +22,7 @@ MAX_MISSING_PROPORTION = 0.999
 MAX_TOO_SMALL_PROPORTION = 0.02
 MIN_TEMPORAL_FRACTION = 10
 MAX_FIELD_TITLE_LEN = 60
+MAX_NULL_SERIES_PROPORTION = 0.05
 
 
 def _assert_repeated_value(field_name, field_values, exception):
@@ -48,17 +49,33 @@ def validate_field_few_values(df):
     series_total = len(df.columns)
 
     for field in df.columns:
-        positive_values = len(df[field][df[field].notnull()])
+        not_null_values = len(df[field][df[field].notnull()])
 
-        # se suma una nueva serie demasiado corta
-        if not positive_values >= MINIMUM_VALUES:
+        # se suma una nueva serie demasiado corta (si está vacía no la cuento)
+        if not_null_values > 0 and not not_null_values >= MINIMUM_VALUES:
             series_too_small += 1
 
         # chequea si hay demasiadas series cortas
         if float(series_too_small) / series_total > MAX_TOO_SMALL_PROPORTION:
             raise ce.FieldFewValuesError(
-                field, positive_values, MINIMUM_VALUES
+                field, not_null_values, MINIMUM_VALUES
             )
+
+
+def validate_distribution_null_series_amount(df, distribution_identifier):
+    series_total = len(df.columns)
+    null_series_amount = 0
+
+    for field in df.columns:
+        not_null_values = len(df[field][df[field].notnull()])
+        if not_null_values == 0:
+            null_series_amount += 1
+
+    null_proportion = float(null_series_amount) / series_total
+    if null_proportion >= MAX_NULL_SERIES_PROPORTION:
+        raise ce.DistributionTooManyNullSeriesError(distribution_identifier,
+                                                    MAX_NULL_SERIES_PROPORTION,
+                                                    null_proportion)
 
 
 def validate_field_title(df):
@@ -296,6 +313,7 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     # validaciones de los valores de las series
     validate_missing_fields(df, distrib_meta)
     validate_values_are_numeric(df, distrib_meta)
+    validate_distribution_null_series_amount(df, distrib_meta['identifier'])
     validate_field_few_values(df)
     validate_missing_values(df)
     validate_df_shape(df, distrib_meta)
