@@ -172,7 +172,7 @@ def _get_fields(time_field, series_id_field, values_field):
             "valor": values_field
         }
         sorted_default_names = sorted(
-            list(default_names.iteritems()), key=lambda tup: tup[1])
+            list(default_names.items()), key=lambda tup: tup[1])
         fields["default_names"] = [tup[0] for tup in sorted_default_names]
         fields["time_field"] = "indice_tiempo"
         fields["series_id_field"] = "serie_id"
