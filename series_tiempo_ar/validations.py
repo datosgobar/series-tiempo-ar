@@ -307,9 +307,6 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     validate_field_title(df)
     validate_title_length(df)
 
-    # validaciones de índice de tiempo
-    validate_using_temporal(df, dataset_meta)
-
     # validaciones de los valores de las series
     validate_missing_fields(df, distrib_meta)
     validate_values_are_numeric(df, distrib_meta)
