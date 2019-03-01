@@ -22,7 +22,7 @@ MAX_MISSING_PROPORTION = 0.999
 MAX_TOO_SMALL_PROPORTION = 0.02
 MIN_TEMPORAL_FRACTION = 10
 MAX_FIELD_TITLE_LEN = 60
-MAX_NULL_SERIES_PROPORTION = 0.05
+MAX_NULL_SERIES_PROPORTION = 0.20
 
 
 def _assert_repeated_value(field_name, field_values, exception):
@@ -312,8 +312,10 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     validate_values_are_numeric(df, distrib_meta)
     validate_distribution_null_series_amount(df, distrib_meta['identifier'])
     validate_field_few_values(df)
-    validate_missing_values(df)
     validate_df_shape(df, distrib_meta)
+
+    # deprecada: queda cubierta por `validate_distribution_null_series_amount`
+    # validate_missing_values(df)
 
 
 def validate_distribution_scraping(
