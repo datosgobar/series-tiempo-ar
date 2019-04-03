@@ -46,12 +46,34 @@ def load_ts_distribution(catalog, identifier, catalog_id=None,
     elif is_csv_file or method == "csv_file":
         file_source = file_source or distribution["downloadURL"]
         time_index = get_distribution_time_index(distribution)
-        return pd.read_csv(
-            file_source, index_col=time_index,
-            parse_dates=[time_index],
-            date_parser=lambda x: arrow.get(x, "YYYY-MM-DD").datetime
-            # encoding="utf-8"
-        )
+
+        try:
+            df = pd.read_csv(
+                file_source, index_col=time_index,
+                parse_dates=[time_index],
+                date_parser=lambda x: arrow.get(x, "YYYY-MM-DD").datetime
+                # encoding="utf-8"
+            )
+        except arrow.parser.ParserError:
+            try:
+                df = pd.read_csv(
+                    file_source, index_col=time_index,
+                    parse_dates=[time_index],
+                    date_parser=lambda x: arrow.get(x, "YYYY-MM").datetime
+                    # encoding="utf-8"
+                )
+            except arrow.parser.ParserError:
+                try:
+                    df = pd.read_csv(
+                        file_source, index_col=time_index,
+                        parse_dates=[time_index],
+                        date_parser=lambda x: arrow.get(x, "YYYY").datetime
+                        # encoding="utf-8"
+                    )
+                except arrow.parser.ParserError:
+                    raise Exception("El formato de fecha no es válido.")
+
+        return df
 
     else:
         raise NotImplementedError("{} no se puede leer".format(identifier))
