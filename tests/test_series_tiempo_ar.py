@@ -3,23 +3,23 @@
 
 """Tests del modulo series_tiempo_ar."""
 
-from __future__ import unicode_literals
 from __future__ import print_function
+from __future__ import unicode_literals
 from __future__ import with_statement
 
 import os
 import unittest
-import nose
 
+import nose
 import pandas as pd
 from nose.tools import raises
 from pydatajson import DataJson
-from series_tiempo_ar.validations import validate_distribution
+
 import series_tiempo_ar.custom_exceptions as ce
+from series_tiempo_ar.validations import validate_distribution
 
 
 class SeriesTiempoArTestCase(unittest.TestCase):
-
     SAMPLES_DIR = os.path.join("tests", "samples")
 
     def setUp(self):
@@ -69,6 +69,7 @@ class SeriesTiempoArTestCase(unittest.TestCase):
             .set_index('indice_tiempo')
 
         validate_distribution(df, catalog, dataset, distribution)
+
 
 if __name__ == '__main__':
     nose.run(defaultTest=__name__)

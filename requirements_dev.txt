@@ -14,3 +14,4 @@ twine
 sphinx_rtd_theme
 sphinxcontrib-napoleon
 nose
+nose
