@@ -21,13 +21,13 @@ from pydatajson.time_series import get_distribution_time_index
 
 
 def load_ts_distribution(
-    catalog,
-    identifier,
-    catalog_id=None,
-    is_text_file=None,
-    is_excel_file=None,
-    is_csv_file=None,
-    file_source=None,
+        catalog,
+        identifier,
+        catalog_id=None,
+        is_text_file=None,
+        is_excel_file=None,
+        is_csv_file=None,
+        file_source=None,
 ):
     """Carga en un DataFrame una distribución de series de tiempo.
 
@@ -110,13 +110,13 @@ def get_ts_distributions_by_method(catalog, method=None):
 def get_distribution_generation_method(distribution):
     # se genera a partir de un archivo de texto con parámetros
     if not distribution.get("downloadURL") and _is_text_file(
-        distribution.get("scrapingFileURL")
+            distribution.get("scrapingFileURL")
     ):
         return "text_file"
 
     # se scrapea a partir de un Excel con parámetros (usando otro proyecto)
     elif not distribution.get("downloadURL") and _is_excel_file(
-        distribution.get("scrapingFileURL")
+            distribution.get("scrapingFileURL")
     ):
         return "excel_file"
 
@@ -194,9 +194,9 @@ def _get_fields(time_field, series_id_field, values_field):
     fields = {}
 
     if (
-        str(time_field).isdigit()
-        and str(series_id_field).isdigit()
-        and str(values_field).isdigit()
+            str(time_field).isdigit()
+            and str(series_id_field).isdigit()
+            and str(values_field).isdigit()
     ):
         fields["ordinal"] = True
         default_names = {
@@ -223,13 +223,13 @@ def _get_fields(time_field, series_id_field, values_field):
 
 
 def get_series_df_from_panel(
-    df_panel,
-    series,
-    time_index_freq,
-    time_format="%Y-%m-%d",
-    time_field="indice_tiempo",
-    series_id_field="serie_id",
-    values_field="valor",
+        df_panel,
+        series,
+        time_index_freq,
+        time_format="%Y-%m-%d",
+        time_field="indice_tiempo",
+        series_id_field="serie_id",
+        values_field="valor",
 ):
     """Convierte tabla con id, fecha y valor en distribución de TS.
 
