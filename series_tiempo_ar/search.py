@@ -17,8 +17,8 @@ def get_time_series_distributions(catalog):
     distributions = dj.get_distributions()
 
     def has_time_index(distribution):
-        for field in distribution.get('field', []):
-            if field.get('specialType') == 'time_index':
+        for field in distribution.get("field", []):
+            if field.get("specialType") == "time_index":
                 return True
         return False
 
