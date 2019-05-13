@@ -1,6 +1,9 @@
 from unittest import TestCase
 
-from series_tiempo_ar.custom_exceptions import FieldIdRepetitionError
+from series_tiempo_ar.custom_exceptions import (
+    FieldIdRepetitionError,
+    FieldDescriptionRepetitionError,
+)
 from series_tiempo_ar.validator import get_distribution_errors
 from tests.helpers import read_data_json
 
@@ -15,3 +18,10 @@ class GetErrorsTests(TestCase):
         data_json = read_data_json("repeated_field_id.json")
         errors = get_distribution_errors(data_json, "125.1")
         self.assertIn(FieldIdRepetitionError, [x.__class__ for x in errors])
+
+    def test_multiple_errors(self):
+        data_json = read_data_json("repeated_field_id_and_description.json")
+        errors = get_distribution_errors(data_json, "125.1")
+        error_classes = [x.__class__ for x in errors]
+        self.assertIn(FieldIdRepetitionError, error_classes)
+        self.assertIn(FieldDescriptionRepetitionError, error_classes)

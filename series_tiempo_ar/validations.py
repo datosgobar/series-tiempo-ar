@@ -44,7 +44,7 @@ def validate_future_time(df):
             raise ce.TimeIndexFutureTimeValueError(iso_time_value, iso_now)
 
 
-def validate_field_few_values(df):
+def validate_field_few_values(df, _distrib_meta, _catalog):
     # La mayoría de las series de una distrib. deben tener un mínimo de valores
     series_too_small = 0
     series_total = len(df.columns)
@@ -61,7 +61,8 @@ def validate_field_few_values(df):
             raise ce.FieldFewValuesError(field, not_null_values, MINIMUM_VALUES)
 
 
-def validate_distribution_null_series_amount(df, distribution_identifier):
+def validate_distribution_null_series_amount(df, distrib_meta, _catalog):
+    distribution_identifier = distrib_meta["identifier"]
     series_total = len(df.columns)
     null_series_amount = 0
 
@@ -77,7 +78,7 @@ def validate_distribution_null_series_amount(df, distribution_identifier):
         )
 
 
-def validate_field_title(df):
+def validate_field_title(df, _distrib_meta, _catalog):
     # Los titulos de los campos deben tener caracteres ASCII + "_"
     valid_field_chars = "abcdefghijklmnopqrstuvwxyz0123456789_"
     for field in df.columns:
@@ -90,7 +91,7 @@ def validate_field_title(df):
                 )
 
 
-def validate_field_id(distrib_meta):
+def validate_field_id(_df, distrib_meta, _catalog):
     # Los ids de los campos deben tener caracteres ASCII + "_"
     special_chars = "_-."
     valid_field_chars = string.ascii_letters + string.digits + special_chars
@@ -100,14 +101,14 @@ def validate_field_id(distrib_meta):
                 raise ce.InvalidFieldIdError(field_id, char, valid_field_chars)
 
 
-def validate_title_length(df):
+def validate_title_length(df, _distrib_meta, _catalog):
     # Los nombres de los campos tienen que tener un máximo de caracteres
     for field in df.columns:
         if len(field) > MAX_FIELD_TITLE_LEN:
             raise ce.FieldTitleTooLongError(field, len(field), MAX_FIELD_TITLE_LEN)
 
 
-def validate_missing_values(df):
+def validate_missing_values(df, _distrib_meta, _catalog):
     # Las series deben tener una proporción máxima de missings
     for field in df.columns:
         total_values = len(df[field])
@@ -155,7 +156,7 @@ def validate_using_temporal(df, dataset_meta):
             )
 
 
-def validate_no_repeated_fields(catalog, distrib_meta):
+def validate_no_repeated_fields(_df, distrib_meta, catalog):
     # 6. Los ids de fields no deben repetirse en todo un catálogo
     field_ids = []
     for dataset in catalog["dataset"]:
@@ -172,19 +173,19 @@ def validate_no_repeated_fields(catalog, distrib_meta):
             raise ce.FieldIdRepetitionError(field_distrib["id"])
 
 
-def validate_no_repeated_titles(distrib_meta):
+def validate_no_repeated_titles(_df, distrib_meta, _catalog):
     # 7. Los títulos de fields no deben repetirse en una distribución
     fields = distrib_meta["field"]
     _assert_repeated_value("title", fields, ce.FieldTitleRepetitionError)
 
 
-def validate_no_repeated_descriptions(distrib_meta):
+def validate_no_repeated_descriptions(_df, distrib_meta, _catalog):
     # 8. Las descripciones de fields no deben repetirse en una distribución
     fields = [field for field in distrib_meta["field"] if "description" in field]
     _assert_repeated_value("description", fields, ce.FieldDescriptionRepetitionError)
 
 
-def validate_values_are_numeric(df, distrib_meta):
+def validate_values_are_numeric(df, distrib_meta, _catalog):
     """Las series documentadas deben contener sólo valores numéricos."""
     fields_title = [
         field["title"]
@@ -196,7 +197,7 @@ def validate_values_are_numeric(df, distrib_meta):
             raise ce.InvalidNumericField(field_title, df[field_title])
 
 
-def validate_missing_fields(df, distrib_meta):
+def validate_missing_fields(df, distrib_meta, _catalog):
     fields = [
         field["title"]
         for field in distrib_meta["field"]
@@ -207,7 +208,7 @@ def validate_missing_fields(df, distrib_meta):
             raise ce.FieldMissingInDistrbutionError(field, distrib_meta["identifier"])
 
 
-def validate_df_shape(df, distrib_meta):
+def validate_df_shape(df, distrib_meta, _catalog):
     periodicity = None
     for field in distrib_meta["field"]:
         if field.get("specialType") == "time_index":
@@ -265,7 +266,7 @@ def validate_header_cell_field_id_or_blank(xl, worksheet, headers_coord, headers
             )
 
 
-def validate_no_repeated_fields_in_distribution(distrib_meta):
+def validate_no_repeated_fields_in_distribution(_df, distrib_meta, _catalog):
     """Verifica que los ID de los fields no estén repetidos dentro de
     la misma distribución
     """
@@ -281,7 +282,7 @@ def validate_no_repeated_fields_in_distribution(distrib_meta):
         fields.add(_id)
 
 
-def validate_distinct_scraping_start_cells(distrib_meta):
+def validate_distinct_scraping_start_cells(_df, distrib_meta):
     for field in distrib_meta.get("field"):
         if field.get("scrapingIdentifierCell") == field.get("scrapingDataStartCell"):
             raise ce.ScrapingStartCellsIdenticalError(
@@ -292,22 +293,22 @@ def validate_distinct_scraping_start_cells(distrib_meta):
 def validate_distribution(df, catalog, _dataset_meta, distrib_meta, _=None):
 
     # validaciones sólo de metadatos
-    validate_field_id(distrib_meta)
-    validate_no_repeated_fields(catalog, distrib_meta)
-    validate_no_repeated_titles(distrib_meta)
-    validate_no_repeated_descriptions(distrib_meta)
-    validate_no_repeated_fields_in_distribution(distrib_meta)
+    validate_field_id(df, distrib_meta, catalog)
+    validate_no_repeated_fields(df, distrib_meta, catalog)
+    validate_no_repeated_titles(df, distrib_meta, catalog)
+    validate_no_repeated_descriptions(df, distrib_meta, catalog)
+    validate_no_repeated_fields_in_distribution(df, distrib_meta, catalog)
 
     # validaciones de headers
-    validate_field_title(df)
-    validate_title_length(df)
+    validate_field_title(df, distrib_meta, catalog)
+    validate_title_length(df, distrib_meta, catalog)
 
     # validaciones de los valores de las series
-    validate_missing_fields(df, distrib_meta)
-    validate_values_are_numeric(df, distrib_meta)
-    validate_distribution_null_series_amount(df, distrib_meta["identifier"])
-    validate_field_few_values(df)
-    validate_df_shape(df, distrib_meta)
+    validate_missing_fields(df, distrib_meta, catalog)
+    validate_values_are_numeric(df, distrib_meta, catalog)
+    validate_distribution_null_series_amount(df, distrib_meta, catalog)
+    validate_field_few_values(df, distrib_meta, catalog)
+    validate_df_shape(df, distrib_meta, catalog)
 
     # deprecada: queda cubierta por `validate_distribution_null_series_amount`
     # validate_missing_values(df)
@@ -324,4 +325,4 @@ def validate_distribution_scraping(
             xl, worksheet, headers_coord, headers_value
         )
 
-    validate_distinct_scraping_start_cells(distrib_meta)
+    validate_distinct_scraping_start_cells(None, distrib_meta)
