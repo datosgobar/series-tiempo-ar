@@ -14,4 +14,4 @@ class GetErrorsTests(TestCase):
     def test_get_errors_repeated_field_id_catalog(self):
         data_json = read_data_json("repeated_field_id.json")
         errors = get_distribution_errors(data_json, "125.1")
-        self.assertIn(FieldIdRepetitionError, map(lambda x: x.__class__, errors))
+        self.assertIn(FieldIdRepetitionError, [x.__class__ for x in errors])
