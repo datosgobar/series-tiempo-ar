@@ -1,9 +1,10 @@
 #! coding: utf-8
-import logging
-import chardet
 import csv
-import arrow
+import logging
 from copy import deepcopy
+
+import arrow
+import chardet
 import pandas as pd
 
 
@@ -12,27 +13,26 @@ def parse_time_value(value, frequency):
 
     if frequency == "A":
         return arrow.get(value).replace(day=1).replace(month=1)
-    elif (frequency == "6M" or frequency == "Q" or frequency == "M"):
+    if frequency in ["6M", "Q", "M"]:
         return arrow.get(value).replace(day=1)
-    else:
-        return arrow.get(value)
+
+    return arrow.get(value)
 
 
 def increment_period(value, periods, frequency):
     """Incrementa una fecha en X períodos, según su frecuencia."""
 
-    if frequency == "A":
-        return value.replace(years=+periods)
-    elif frequency == "6M":
-        return value.replace(months=+(6 * periods))
-    elif frequency == "Q":
-        return value.replace(months=+(3 * periods))
-    elif frequency == "M":
-        return value.replace(months=+periods)
-    elif frequency == "D":
-        return value.replace(days=+periods)
-    else:
-        raise Exception("No se reconoce la frecuencia {}".format(frequency))
+    actions = {
+        "A": lambda: value.replace(years=+periods),
+        "6M": lambda: value.replace(months=+(6 * periods)),
+        "Q": lambda: value.replace(months=+(3 * periods)),
+        "M": lambda: value.replace(months=+periods),
+        "D": lambda: value.replace(days=+periods),
+    }
+    try:
+        return actions[frequency]()
+    except KeyError:
+        raise ValueError("No se reconoce la frecuencia {}".format(frequency))
 
 
 def fix_time_index(time_values, values, frequency):
@@ -42,11 +42,12 @@ def fix_time_index(time_values, values, frequency):
     new_values = []
 
     previous_time_value = None
-    previous_value = None
 
     current_time_value = None
     current_value = None
 
+    next_time_value = None
+    next_value = None
     for next_time_value, next_value in zip(list(time_values), list(values)):
         next_time_value = parse_time_value(next_time_value, frequency)
 
@@ -61,27 +62,23 @@ def fix_time_index(time_values, values, frequency):
         # cuando empieza a iterar, todavía no tiene valores anteriores
         elif not previous_time_value:
             previous_time_value = deepcopy(current_time_value)
-            previous_value = deepcopy(current_value)
             current_time_value = deepcopy(next_time_value)
             current_value = deepcopy(next_value)
 
         # cuando tiene valores anteriores, comienza a buscar errores
         # corregibles
         else:
-            expected_current = increment_period(
-                previous_time_value, 1, frequency)
+            expected_current = increment_period(previous_time_value, 1, frequency)
             expected_next = increment_period(previous_time_value, 2, frequency)
 
             # arregla período incorrecto, si anterior y siguiente son correctos
-            if (
-                (current_time_value != expected_current) and
-                (next_time_value == expected_next)
+            if (current_time_value != expected_current) and (
+                next_time_value == expected_next
             ):
                 current_time_value = deepcopy(expected_current)
 
-            elif (
-                (current_time_value > expected_current) and
-                (next_time_value > expected_next)
+            elif (current_time_value > expected_current) and (
+                next_time_value > expected_next
             ):
                 # agrega todos los missings faltantes en el índice
                 while current_time_value > expected_current:
@@ -89,13 +86,11 @@ def fix_time_index(time_values, values, frequency):
                     new_values.append(pd.np.nan)
 
                     previous_time_value = increment_period(
-                        previous_time_value, 1, frequency)
-                    previous_value = pd.np.nan
+                        previous_time_value, 1, frequency
+                    )
 
-                    expected_current = increment_period(
-                        expected_current, 1, frequency)
-                    expected_next = increment_period(
-                        expected_next, 1, frequency)
+                    expected_current = increment_period(expected_current, 1, frequency)
+                    expected_next = increment_period(expected_next, 1, frequency)
 
             # agrega a la lista el nuevo valor, una vez corregido
             new_time_values.append(deepcopy(current_time_value))
@@ -103,7 +98,6 @@ def fix_time_index(time_values, values, frequency):
 
             # incrementa los valores anteriores, para la próxima iteración
             previous_time_value = deepcopy(current_time_value)
-            previous_value = deepcopy(current_value)
             current_time_value = deepcopy(next_time_value)
             current_value = deepcopy(next_value)
 
@@ -111,8 +105,7 @@ def fix_time_index(time_values, values, frequency):
     new_time_values.append(deepcopy(next_time_value))
     new_values.append(deepcopy(next_value))
 
-    new_time_values_str = [
-        value.format("YYYY-MM-DD") for value in new_time_values]
+    new_time_values_str = [value.format("YYYY-MM-DD") for value in new_time_values]
 
     return new_time_values_str, new_values
 
@@ -123,23 +116,23 @@ def freq_iso_to_pandas(freq_iso8601, how="start"):
         "R/P6M": "6MS",
         "R/P3M": "QS",
         "R/P1M": "MS",
-        "R/P1D": "D"
+        "R/P1D": "D",
     }
     frequencies_map_end = {
         "R/P1Y": "A",
         "R/P6M": "6M",
         "R/P3M": "Q",
         "R/P1M": "M",
-        "R/P1D": "D"
+        "R/P1D": "D",
     }
     if how == "start":
         return frequencies_map_start[freq_iso8601]
-    elif how == "end":
+    if how == "end":
         return frequencies_map_end[freq_iso8601]
-    else:
-        raise Exception(
-            "{} no se reconoce para 'how': debe ser 'start' o 'end'".format(
-                how))
+
+    raise Exception(
+        "{} no se reconoce para 'how': debe ser 'start' o 'end'".format(how)
+    )
 
 
 def get_logger(name=__name__):
@@ -148,7 +141,8 @@ def get_logger(name=__name__):
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
     logging_formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     ch.setFormatter(logging_formatter)
     # logger.addHandler(ch)
 
@@ -164,9 +158,9 @@ def find_encoding(f_path):
     Returns:
         str: Encoding o mensaje 'no identificado'
     """
-    r_file = open(f_path, 'rb').read()
+    r_file = open(f_path, "rb").read()
     try:
-        encoding = chardet.detect(r_file)['encoding']
+        encoding = chardet.detect(r_file)["encoding"]
         print("Encoding estimado automáticamente: {}".format(encoding))
         return encoding
     except Exception:
@@ -184,9 +178,12 @@ def find_dialect(f_path):
     Returns:
         tuple: Caracter delimitador de campos y caracter delimitador de texto,
     """
-    with open(f_path, 'rb') as csvfile:
-        line = csvfile.readline().decode('utf-8', errors='ignore')
+    with open(f_path, "rb") as csvfile:
+        line = csvfile.readline().decode("utf-8", errors="ignore")
         dialect = csv.Sniffer().sniff(line)
-        print('Detección automática separador ("{}") y comillas ("{}")'.format(
-            dialect.delimiter, dialect.quotechar))
+        print(
+            'Detección automática separador ("{}") y comillas ("{}")'.format(
+                dialect.delimiter, dialect.quotechar
+            )
+        )
         return dialect.delimiter, dialect.quotechar

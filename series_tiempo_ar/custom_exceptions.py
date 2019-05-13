@@ -9,30 +9,29 @@ from __future__ import with_statement
 
 
 class InvalidNumericField(ValueError):
-
     def __init__(self, field_title, values):
         msg = "'{}' tiene valores no numericos: '{}'".format(
-            field_title, " ".join(list(values)))
+            field_title, " ".join(list(values))
+        )
         super(InvalidNumericField, self).__init__(msg)
 
 
 class FieldTitleTooLongError(ValueError):
-
     def __init__(self, field, field_len, max_field_len):
         msg = "'{}' tiene '{}' caracteres. Maximo: '{}'".format(
-            field, field_len, max_field_len)
+            field, field_len, max_field_len
+        )
         super(FieldTitleTooLongError, self).__init__(msg)
 
 
 class InvalidFieldTitleError(ValueError):
-
-    def __init__(self, field, char=None, valid_field_chars=None,
-                 is_unnamed=None):
+    def __init__(self, field, char=None, valid_field_chars=None, is_unnamed=None):
         if is_unnamed:
             msg = "Existe un campo sin nombre en la distribucion: '{}'"
         elif char and valid_field_chars:
             msg = "'{}' usa caracteres invalidos ('{}'). Validos: '{}'".format(
-                field, char, valid_field_chars)
+                field, char, valid_field_chars
+            )
         else:
             raise NotImplementedError(
                 "Debe usarse 'is_unnamed' o 'char' + 'valid_field_chars'"
@@ -41,57 +40,54 @@ class InvalidFieldTitleError(ValueError):
 
 
 class InvalidFieldIdError(ValueError):
-
     def __init__(self, field_id, char, valid_field_chars):
         msg = "'{}' usa caracteres invalidos ('{}'). Validos: '{}'".format(
-            field_id, char, valid_field_chars)
+            field_id, char, valid_field_chars
+        )
         super(InvalidFieldIdError, self).__init__(msg)
 
 
 class TimeIndexFutureTimeValueError(ValueError):
-
     def __init__(self, iso_time_value, iso_now):
-        msg = "{} es fecha futura respecto de {}".format(
-            iso_time_value, iso_now)
+        msg = "{} es fecha futura respecto de {}".format(iso_time_value, iso_now)
         super(TimeIndexFutureTimeValueError, self).__init__(msg)
 
 
 class FieldFewValuesError(ValueError):
-
     def __init__(self, field, positive_values, minimum_values):
         msg = "{} tiene {} valores, deberia tener {} o mas".format(
-            field, positive_values, minimum_values)
+            field, positive_values, minimum_values
+        )
         super(FieldFewValuesError, self).__init__(msg)
 
 
 class FieldTooManyMissingsError(ValueError):
-
     def __init__(self, field, missing_values, positive_values):
         msg = "{} tiene mas missings ({}) que valores ({})".format(
-            field, missing_values, positive_values)
+            field, missing_values, positive_values
+        )
         super(FieldTooManyMissingsError, self).__init__(msg)
 
 
 class DatasetTemporalMetadataError(ValueError):
-
     def __init__(self, temporal):
         msg = "{} no es un formato de 'temporal' valido".format(temporal)
         super(DatasetTemporalMetadataError, self).__init__(msg)
 
 
 class TimeValueBeforeTemporalError(ValueError):
-
     def __init__(self, iso_time_value, iso_ini_temporal):
         msg = "Serie comienza ({}) antes de 'temporal' ({}) ".format(
-            iso_time_value, iso_ini_temporal)
+            iso_time_value, iso_ini_temporal
+        )
         super(TimeValueBeforeTemporalError, self).__init__(msg)
 
 
 class TimeIndexTooShortError(ValueError):
-
     def __init__(self, iso_end_index, iso_half_temporal, temporal):
         msg = "Serie termina ({}) antes de mitad de 'temporal' ({}) {}".format(
-            iso_end_index, iso_half_temporal, temporal)
+            iso_end_index, iso_half_temporal, temporal
+        )
         super(TimeIndexTooShortError, self).__init__(msg)
 
 
@@ -99,21 +95,19 @@ class BaseRepetitionError(ValueError):
 
     """El id de una entidad está repetido en el catálogo."""
 
-    def get_msg(self, entity_name, entity_type, entity_id=None,
-                repeated_entities=None):
+    def get_msg(self, entity_name, entity_type, entity_id=None, repeated_entities=None):
         if entity_id and repeated_entities is not None:
             return "Hay mas de 1 {} con {} {}: {}".format(
-                entity_name, entity_type, entity_id, repeated_entities)
-        elif repeated_entities is not None:
+                entity_name, entity_type, entity_id, repeated_entities
+            )
+        if repeated_entities is not None:
             return "Hay {} con {} repetido: {}".format(
-                entity_name, entity_type, repeated_entities)
-        else:
-            raise NotImplementedError(
-                "Hace falta por lo menos repeated_entities")
+                entity_name, entity_type, repeated_entities
+            )
+        raise NotImplementedError("Hace falta por lo menos repeated_entities")
 
 
 class FieldIdRepetitionError(BaseRepetitionError):
-
     def __init__(self, field_id=None, repeated_fields=None):
         msg = self.get_msg("field", "id", field_id, repeated_fields)
         super(FieldIdRepetitionError, self).__init__(msg)
@@ -138,104 +132,103 @@ class FieldDescriptionRepetitionError(BaseRepetitionError):
 
 
 class DistributionIdRepetitionError(BaseRepetitionError):
-
     def __init__(self, distribution_id=None, repeated_distributions=None):
-        msg = self.get_msg("distribution", "id", distribution_id,
-                           repeated_distributions)
+        msg = self.get_msg(
+            "distribution", "id", distribution_id, repeated_distributions
+        )
         super(DistributionIdRepetitionError, self).__init__(msg)
 
 
 class DatasetIdRepetitionError(BaseRepetitionError):
-
     def __init__(self, dataset_id=None, repeated_datasets=None):
         msg = self.get_msg("dataset", "id", dataset_id, repeated_datasets)
         super(DatasetIdRepetitionError, self).__init__(msg)
 
 
 class BaseNonExistentError(ValueError):
-
     @staticmethod
     def get_msg(entity_name, entity_type, entity_id):
         """El id de una entidad no existe en el catálogo."""
-        return "No hay ningun {} con {} {}".format(
-            entity_name, entity_type, entity_id)
+        return "No hay ningun {} con {} {}".format(entity_name, entity_type, entity_id)
 
 
 class FieldIdNonExistentError(BaseNonExistentError):
-
     def __init__(self, field_id):
         msg = self.get_msg("field", "id", field_id)
         super(FieldIdNonExistentError, self).__init__(msg)
 
 
 class FieldTitleNonExistentError(BaseNonExistentError):
-
     def __init__(self, field_title):
         msg = self.get_msg("field", "title", field_title)
         super(FieldTitleNonExistentError, self).__init__(msg)
 
 
 class DistributionIdNonExistentError(BaseNonExistentError):
-
     def __init__(self, distribution_id):
         msg = self.get_msg("distribution", "id", distribution_id)
         super(DistributionIdNonExistentError, self).__init__(msg)
 
 
 class DatasetIdNonExistentError(BaseNonExistentError):
-
     def __init__(self, dataset_id):
         msg = self.get_msg("dataset", "id", dataset_id)
         super(DatasetIdNonExistentError, self).__init__(msg)
 
 
 class FieldMissingInDistrbutionError(ValueError):
-
     def __init__(self, field, distribution):
-        msg = u"Campo {} faltante en la distribución {}".format(
-            field,
-            distribution
-        )
-        super(ValueError, self).__init__(msg)
+        msg = "Campo {} faltante en la distribución {}".format(field, distribution)
+        super(FieldMissingInDistrbutionError, self).__init__(msg)
 
 
 class DistributionBadDataError(ValueError):
-
-    def __init__(self, distribution_id, time_index_ini, time_index_end,
-                 timie_index_freq, time_index_size, values_size):
-        msg = u"Datos inconsistentes en la distribución {}: " \
-              u"Comienzo '{}' / Fin '{}' / Frecuencia '{}' / Fechas '{}' / Valores '{}'"
-        msg = msg.format(
-            distribution_id, time_index_ini, time_index_end,
-            timie_index_freq, time_index_size, values_size
+    def __init__(
+        self,
+        distribution_id,
+        time_index_ini,
+        time_index_end,
+        timie_index_freq,
+        time_index_size,
+        values_size,
+    ):
+        msg = (
+            "Datos inconsistentes en la distribución {}: "
+            "Comienzo '{}' / Fin '{}' / Frecuencia '{}' / Fechas '{}' / Valores '{}'"
         )
-        super(ValueError, self).__init__(msg)
+        msg = msg.format(
+            distribution_id,
+            time_index_ini,
+            time_index_end,
+            timie_index_freq,
+            time_index_size,
+            values_size,
+        )
+        super(DistributionBadDataError, self).__init__(msg)
 
 
 class HeaderNotBlankOrIdError(ValueError):
-
     def __init__(self, worksheet, header_coord, header_value, ws_header_value):
         msg = "'{}' en hoja '{}' tiene '{}'. Debe ser vacio o '{}'".format(
-            header_coord, worksheet, ws_header_value, header_value)
+            header_coord, worksheet, ws_header_value, header_value
+        )
         super(HeaderNotBlankOrIdError, self).__init__(msg)
 
 
 class HeaderIdError(ValueError):
-
     def __init__(self, worksheet, header_coord, header_value, ws_header_value):
         msg = "'{}' en hoja '{}' tiene '{}'. Debe ser '{}'".format(
-            header_coord, worksheet, ws_header_value, header_value)
+            header_coord, worksheet, ws_header_value, header_value
+        )
         super(HeaderIdError, self).__init__(msg)
 
 
 class ScrapingStartCellsIdenticalError(ValueError):
-
     def __init__(self, scrapingIdentifierCell, scrapingDataStartCell):
-        msg = u"scrapingIdentifierCell ({}) es igual a scrapingDataStartCell ({})".format(
-            scrapingIdentifierCell,
-            scrapingDataStartCell
+        msg = "scrapingIdentifierCell ({}) es igual a scrapingDataStartCell ({})".format(
+            scrapingIdentifierCell, scrapingDataStartCell
         )
-        super(ValueError, self).__init__(msg)
+        super(ScrapingStartCellsIdenticalError, self).__init__(msg)
 
 
 class DistributionTooManyNullSeriesError(Exception):

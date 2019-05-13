@@ -10,8 +10,7 @@ from __future__ import with_statement
 import os
 import glob
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(
-    os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # directorios del repositorio
 LOGS_DIR = os.path.join(PROJECT_DIR, "logs")
@@ -28,27 +27,35 @@ CODIGO_DIR = os.path.join(PROJECT_DIR, "scripts")
 SCHEMAS_DIR = os.path.join(PROJECT_DIR, "series_tiempo_ar", "schemas")
 
 
-def get_distribution_path(catalog_id, dataset_id, distribution_id,
-                          catalogs_dir=CATALOGS_DIR):
+def get_distribution_path(
+    catalog_id, dataset_id, distribution_id, catalogs_dir=CATALOGS_DIR
+):
     distribution_download_dir = os.path.join(
-        catalogs_dir, "catalog", catalog_id, "dataset", dataset_id,
-        "distribution", distribution_id, "download"
+        catalogs_dir,
+        "catalog",
+        catalog_id,
+        "dataset",
+        dataset_id,
+        "distribution",
+        distribution_id,
+        "download",
     )
     glob_pattern = os.path.join(distribution_download_dir, "*.csv")
     distribution_csv_files = glob.glob(glob_pattern)
 
     if len(distribution_csv_files) == 1:
         return distribution_csv_files[0]
-    elif len(distribution_csv_files) == 0:
+    if not distribution_csv_files:
         raise Exception(
             "Sin archivos para la distribucion {} del dataset {}\n{}".format(
-                distribution_id, dataset_id, glob_pattern))
-    else:
-        raise Exception(
-            "{} archivos para la distribucion {} del dataset {}\n{}".format(
-                len(distribution_csv_files), distribution_id,
-                dataset_id, glob_pattern)
+                distribution_id, dataset_id, glob_pattern
+            )
         )
+    raise Exception(
+        "{} archivos para la distribucion {} del dataset {}\n{}".format(
+            len(distribution_csv_files), distribution_id, dataset_id, glob_pattern
+        )
+    )
 
 
 def get_catalogs_path(catalogs_dir=CATALOGS_DIR):
@@ -60,5 +67,7 @@ def get_catalog_path(catalog_id, catalogs_dir=CATALOGS_DIR):
 
 
 def get_catalog_ids(catalogs_dir=CATALOGS_DIR):
-    return [os.path.basename(os.path.dirname(catalog_path))
-            for catalog_path in get_catalogs_path(catalogs_dir)]
+    return [
+        os.path.basename(os.path.dirname(catalog_path))
+        for catalog_path in get_catalogs_path(catalogs_dir)
+    ]

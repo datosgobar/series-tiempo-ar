@@ -3,16 +3,18 @@
 
 """Módulo con métodos para hacer validaciones"""
 
-from __future__ import unicode_literals
 from __future__ import print_function
+from __future__ import unicode_literals
 from __future__ import with_statement
-import pandas as pd
-import numpy as np
-import arrow
+
 import string
-from six import text_type
+
+import arrow
+import numpy as np
+import pandas as pd
 from pandas.api.types import is_numeric_dtype
 from dateutil.parser import parse as parse_time
+from six import text_type
 
 import series_tiempo_ar.custom_exceptions as ce
 from .helpers import freq_iso_to_pandas
@@ -28,15 +30,14 @@ MAX_NULL_SERIES_PROPORTION = 0.20
 def _assert_repeated_value(field_name, field_values, exception):
     fields = pd.Series([field[field_name] for field in field_values])
     field_dups = fields[fields.duplicated()].values
-    if not len(field_dups) == 0:
+    if field_dups:
         raise exception(repeated_fields=field_dups)
 
 
 def validate_future_time(df):
     # No debe haber fechas futuras
     for time_value in df.index:
-        time_value = arrow.get(time_value.year, time_value.month,
-                               time_value.day)
+        time_value = arrow.get(time_value.year, time_value.month, time_value.day)
         if not time_value.year <= arrow.now().year:
             iso_time_value = time_value.isoformat()
             iso_now = arrow.now().isoformat()
@@ -57,9 +58,7 @@ def validate_field_few_values(df):
 
         # chequea si hay demasiadas series cortas
         if float(series_too_small) / series_total > MAX_TOO_SMALL_PROPORTION:
-            raise ce.FieldFewValuesError(
-                field, not_null_values, MINIMUM_VALUES
-            )
+            raise ce.FieldFewValuesError(field, not_null_values, MINIMUM_VALUES)
 
 
 def validate_distribution_null_series_amount(df, distribution_identifier):
@@ -73,9 +72,9 @@ def validate_distribution_null_series_amount(df, distribution_identifier):
 
     null_proportion = float(null_series_amount) / series_total
     if null_proportion >= MAX_NULL_SERIES_PROPORTION:
-        raise ce.DistributionTooManyNullSeriesError(distribution_identifier,
-                                                    MAX_NULL_SERIES_PROPORTION,
-                                                    null_proportion)
+        raise ce.DistributionTooManyNullSeriesError(
+            distribution_identifier, MAX_NULL_SERIES_PROPORTION, null_proportion
+        )
 
 
 def validate_field_title(df):
@@ -83,9 +82,7 @@ def validate_field_title(df):
     valid_field_chars = "abcdefghijklmnopqrstuvwxyz0123456789_"
     for field in df.columns:
         if "unnamed" in field.lower():
-            raise ce.InvalidFieldTitleError(
-                field, is_unnamed=True
-            )
+            raise ce.InvalidFieldTitleError(field, is_unnamed=True)
         for char in field:
             if char not in valid_field_chars:
                 raise ce.InvalidFieldTitleError(
@@ -97,22 +94,17 @@ def validate_field_id(distrib_meta):
     # Los ids de los campos deben tener caracteres ASCII + "_"
     special_chars = "_-."
     valid_field_chars = string.ascii_letters + string.digits + special_chars
-    for field_id in [field["id"] for field in distrib_meta["field"]
-                     if "id" in field]:
+    for field_id in [field["id"] for field in distrib_meta["field"] if "id" in field]:
         for char in field_id:
             if char not in valid_field_chars:
-                raise ce.InvalidFieldIdError(
-                    field_id, char, valid_field_chars
-                )
+                raise ce.InvalidFieldIdError(field_id, char, valid_field_chars)
 
 
 def validate_title_length(df):
     # Los nombres de los campos tienen que tener un máximo de caracteres
     for field in df.columns:
         if len(field) > MAX_FIELD_TITLE_LEN:
-            raise ce.FieldTitleTooLongError(
-                field, len(field), MAX_FIELD_TITLE_LEN
-            )
+            raise ce.FieldTitleTooLongError(field, len(field), MAX_FIELD_TITLE_LEN)
 
 
 def validate_missing_values(df):
@@ -123,9 +115,7 @@ def validate_missing_values(df):
         missing_values = total_values - positive_values
         missing_values_prop = missing_values / float(total_values)
         if not missing_values_prop <= MAX_MISSING_PROPORTION:
-            raise ce.FieldTooManyMissingsError(
-                field, missing_values, positive_values
-            )
+            raise ce.FieldTooManyMissingsError(field, missing_values, positive_values)
 
 
 # noinspection PyUnresolvedReferences
@@ -142,25 +132,27 @@ def validate_using_temporal(df, dataset_meta):
             raise ce.DatasetTemporalMetadataError(dataset_meta["temporal"])
         # 4. Las series deben comenzar después del valor inicial de "temporal"
         for time_value in df.index:
-            time_value = arrow.get(time_value.year, time_value.month,
-                                   time_value.day)
-            if not time_value >= arrow.get(ini_temporal):
+            time_value = arrow.get(time_value.year, time_value.month, time_value.day)
+            if time_value < arrow.get(ini_temporal):
                 iso_time_value = time_value.isoformat()
                 iso_ini_temporal = arrow.get(ini_temporal).isoformat()
-                raise ce.TimeValueBeforeTemporalError(
-                    iso_time_value, iso_ini_temporal)
+                raise ce.TimeValueBeforeTemporalError(iso_time_value, iso_ini_temporal)
 
         # 5. Las series deben terminar después de la mitad del rango "temporal"
-        half_temporal = arrow.get(ini_temporal) + (
-            arrow.get(end_temporal) - arrow.get(ini_temporal)
-        ) / MIN_TEMPORAL_FRACTION
+        half_temporal = (
+            arrow.get(ini_temporal)
+            + (arrow.get(end_temporal) - arrow.get(ini_temporal))
+            / MIN_TEMPORAL_FRACTION
+        )
         end_time_value_str = "{}-{}-{}".format(
-            df.index[-1].year, df.index[-1].month, df.index[-1].day)
+            df.index[-1].year, df.index[-1].month, df.index[-1].day
+        )
         iso_end_index = arrow.get(end_time_value_str).isoformat()
         iso_half_temporal = half_temporal.isoformat()
         if not arrow.get(end_time_value_str) >= half_temporal:
             raise ce.TimeIndexTooShortError(
-                iso_end_index, iso_half_temporal, dataset_meta["temporal"])
+                iso_end_index, iso_half_temporal, dataset_meta["temporal"]
+            )
 
 
 def validate_no_repeated_fields(catalog, distrib_meta):
@@ -168,8 +160,10 @@ def validate_no_repeated_fields(catalog, distrib_meta):
     field_ids = []
     for dataset in catalog["dataset"]:
         for distribution in dataset["distribution"]:
-            if ("field" in distribution and
-                    distribution["identifier"] != distrib_meta["identifier"]):
+            if (
+                "field" in distribution
+                and distribution["identifier"] != distrib_meta["identifier"]
+            ):
                 for field in distribution["field"]:
                     if field["title"] != "indice_tiempo" and "id" in field:
                         field_ids.append(field["id"])
@@ -186,16 +180,15 @@ def validate_no_repeated_titles(distrib_meta):
 
 def validate_no_repeated_descriptions(distrib_meta):
     # 8. Las descripciones de fields no deben repetirse en una distribución
-    fields = [field for field in distrib_meta["field"]
-              if "description" in field]
-    _assert_repeated_value("description", fields,
-                           ce.FieldDescriptionRepetitionError)
+    fields = [field for field in distrib_meta["field"] if "description" in field]
+    _assert_repeated_value("description", fields, ce.FieldDescriptionRepetitionError)
 
 
 def validate_values_are_numeric(df, distrib_meta):
     """Las series documentadas deben contener sólo valores numéricos."""
     fields_title = [
-        field["title"] for field in distrib_meta["field"]
+        field["title"]
+        for field in distrib_meta["field"]
         if "specialType" not in field or field["specialType"] != "time_index"
     ]
     for field_title in fields_title:
@@ -205,20 +198,20 @@ def validate_values_are_numeric(df, distrib_meta):
 
 def validate_missing_fields(df, distrib_meta):
     fields = [
-        field["title"] for field in distrib_meta["field"]
+        field["title"]
+        for field in distrib_meta["field"]
         if "specialType" not in field or field["specialType"] != "time_index"
     ]
     for field in fields:
         if field not in df:
-            raise ce.FieldMissingInDistrbutionError(field,
-                                                    distrib_meta['identifier'])
+            raise ce.FieldMissingInDistrbutionError(field, distrib_meta["identifier"])
 
 
 def validate_df_shape(df, distrib_meta):
     periodicity = None
-    for field in distrib_meta['field']:
-        if field.get('specialType') == 'time_index':
-            periodicity = field.get('specialTypeDetail')
+    for field in distrib_meta["field"]:
+        if field.get("specialType") == "time_index":
+            periodicity = field.get("specialTypeDetail")
 
     freq = freq_iso_to_pandas(periodicity)
     new_index = pd.date_range(df.index[0], df.index[-1], freq=freq)
@@ -228,8 +221,8 @@ def validate_df_shape(df, distrib_meta):
         pd.DataFrame(index=new_index, data=data, columns=columns)
 
     except ValueError:
-        if freq == 'D':
-            freq = 'B'
+        if freq == "D":
+            freq = "B"
             new_index = pd.date_range(df.index[0], df.index[-1], freq=freq)
             try:
                 pd.DataFrame(index=new_index, data=data, columns=columns)
@@ -239,9 +232,12 @@ def validate_df_shape(df, distrib_meta):
                 pass
 
         raise ce.DistributionBadDataError(
-            distrib_meta['identifier'],
-            df.index[0], df.index[-1], periodicity,
-            len(new_index), len(data)
+            distrib_meta["identifier"],
+            df.index[0],
+            df.index[-1],
+            periodicity,
+            len(new_index),
+            len(data),
         )
 
 
@@ -251,21 +247,22 @@ def validate_header_cell_field_id(xl, worksheet, headers_coord, headers_value):
         ws_header_value = xl.wb[worksheet][header_coord].value
         if ws_header_value != header_value:
             raise ce.HeaderIdError(
-                worksheet, header_coord, header_value, ws_header_value)
+                worksheet, header_coord, header_value, ws_header_value
+            )
 
 
-def validate_header_cell_field_id_or_blank(
-        xl, worksheet, headers_coord, headers_value):
+def validate_header_cell_field_id_or_blank(xl, worksheet, headers_coord, headers_value):
     # Las celdas de los headers deben estar en blanco o contener un id
     for header_coord, header_value in zip(headers_coord, headers_value):
         ws_header_value = xl.wb[worksheet][header_coord].value
         if (
-            ws_header_value and
-            len(text_type(ws_header_value).strip()) > 0 and
-            ws_header_value != header_value
+            ws_header_value
+            and text_type(ws_header_value).strip()
+            and ws_header_value != header_value
         ):
             raise ce.HeaderNotBlankOrIdError(
-                worksheet, header_coord, header_value, ws_header_value)
+                worksheet, header_coord, header_value, ws_header_value
+            )
 
 
 def validate_no_repeated_fields_in_distribution(distrib_meta):
@@ -273,12 +270,12 @@ def validate_no_repeated_fields_in_distribution(distrib_meta):
     la misma distribución
     """
     fields = set()
-    for field in distrib_meta.get('field'):
-        _id = field.get('id')
+    for field in distrib_meta.get("field"):
+        _id = field.get("id")
         if not _id:
             continue
 
-        if field.get('id') in fields:
+        if field.get("id") in fields:
             raise ce.FieldIdRepetitionError(repeated_fields=_id)
 
         fields.add(_id)
@@ -288,13 +285,11 @@ def validate_distinct_scraping_start_cells(distrib_meta):
     for field in distrib_meta.get("field"):
         if field.get("scrapingIdentifierCell") == field.get("scrapingDataStartCell"):
             raise ce.ScrapingStartCellsIdenticalError(
-                field.get("scrapingIdentifierCell"),
-                field.get("scrapingDataStartCell")
+                field.get("scrapingIdentifierCell"), field.get("scrapingDataStartCell")
             )
 
 
-def validate_distribution(df, catalog, dataset_meta, distrib_meta,
-                          _=None):
+def validate_distribution(df, catalog, _dataset_meta, distrib_meta, _=None):
 
     # validaciones sólo de metadatos
     validate_field_id(distrib_meta)
@@ -310,7 +305,7 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
     # validaciones de los valores de las series
     validate_missing_fields(df, distrib_meta)
     validate_values_are_numeric(df, distrib_meta)
-    validate_distribution_null_series_amount(df, distrib_meta['identifier'])
+    validate_distribution_null_series_amount(df, distrib_meta["identifier"])
     validate_field_few_values(df)
     validate_df_shape(df, distrib_meta)
 
@@ -319,14 +314,14 @@ def validate_distribution(df, catalog, dataset_meta, distrib_meta,
 
 
 def validate_distribution_scraping(
-        xl, worksheet, headers_coord, headers_value, distrib_meta,
-        force_ids=True):
+    xl, worksheet, headers_coord, headers_value, distrib_meta, force_ids=True
+):
 
     if force_ids:
-        validate_header_cell_field_id(
-            xl, worksheet, headers_coord, headers_value)
+        validate_header_cell_field_id(xl, worksheet, headers_coord, headers_value)
     else:
         validate_header_cell_field_id_or_blank(
-            xl, worksheet, headers_coord, headers_value)
+            xl, worksheet, headers_coord, headers_value
+        )
 
     validate_distinct_scraping_start_cells(distrib_meta)
