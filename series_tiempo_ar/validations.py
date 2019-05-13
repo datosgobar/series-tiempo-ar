@@ -289,7 +289,7 @@ def validate_distinct_scraping_start_cells(distrib_meta):
             )
 
 
-def validate_distribution(df, catalog, dataset_meta, distrib_meta, _=None):
+def validate_distribution(df, catalog, _dataset_meta, distrib_meta, _=None):
 
     # validaciones sólo de metadatos
     validate_field_id(distrib_meta)

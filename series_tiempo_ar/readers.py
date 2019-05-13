@@ -54,7 +54,8 @@ def load_ts_distribution(
 
         try:
             df = pd.read_csv(
-                file_source, index_col=time_index,
+                file_source,
+                index_col=time_index,
                 parse_dates=[time_index],
                 date_parser=lambda x: arrow.get(x, "YYYY-MM-DD").datetime
                 # encoding="utf-8"
@@ -62,7 +63,8 @@ def load_ts_distribution(
         except arrow.parser.ParserError:
             try:
                 df = pd.read_csv(
-                    file_source, index_col=time_index,
+                    file_source,
+                    index_col=time_index,
                     parse_dates=[time_index],
                     date_parser=lambda x: arrow.get(x, "YYYY-MM").datetime
                     # encoding="utf-8"
@@ -70,7 +72,8 @@ def load_ts_distribution(
             except arrow.parser.ParserError:
                 try:
                     df = pd.read_csv(
-                        file_source, index_col=time_index,
+                        file_source,
+                        index_col=time_index,
                         parse_dates=[time_index],
                         date_parser=lambda x: arrow.get(x, "YYYY").datetime
                         # encoding="utf-8"
