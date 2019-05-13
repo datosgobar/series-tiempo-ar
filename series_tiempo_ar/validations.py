@@ -30,7 +30,7 @@ MAX_NULL_SERIES_PROPORTION = 0.20
 def _assert_repeated_value(field_name, field_values, exception):
     fields = pd.Series([field[field_name] for field in field_values])
     field_dups = fields[fields.duplicated()].values
-    if field_dups:
+    if field_dups.size > 0:
         raise exception(repeated_fields=field_dups)
 
 
