@@ -16,14 +16,11 @@ sudo: false
 install:
 - pip install -r requirements.txt
 - pip install -r requirements_dev.txt
-- pip install python-coveralls
-- pip install coveralls
 
 script:
 - nosetests --with-coverage
 - sh scripts/black.sh
 - bash scripts/pylint.sh
-- travis-sphinx --source=docs -n build
 
 language: python
 python:
