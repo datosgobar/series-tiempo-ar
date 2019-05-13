@@ -20,7 +20,7 @@ install:
 script:
 - nosetests
 - sh scripts/black.sh
-- bash scripts/pylint.sh
+- bash scripts/pylint.sh --full
 
 language: python
 python:
