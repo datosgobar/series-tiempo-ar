@@ -21,17 +21,13 @@ install:
 
 script:
 - nosetests --with-coverage
+- sh scripts/black.sh
+- bash scripts/pylint.sh
 - travis-sphinx --source=docs -n build
 
 language: python
 python:
-- '2.7'
-
-matrix:
-  allow_failures:
-  - python: '2.6'
-  - python: '3.4'
-  - python: pypy
+- '3.6'
 
 after_success:
 - travis-sphinx deploy
@@ -39,17 +35,3 @@ after_success:
 
 notifications:
   slack: ssipyga:yyz0hyWmiaoGGnprhjqDXUwk
-
-
-
-
-
-
-
-
-
-
-
-
-
-
