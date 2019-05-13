@@ -18,9 +18,7 @@ install:
 - pip install -r requirements_dev.txt
 
 script:
-- nosetests
-- sh scripts/black.sh
-- bash scripts/pylint.sh --full
+  - sh scripts/run_all.sh
 
 language: python
 python:
