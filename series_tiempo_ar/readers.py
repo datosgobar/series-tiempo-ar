@@ -8,26 +8,26 @@ Permite leer (online o local):
     2. Distribuciones a parsear desde un TXT o CSV con formato de panel
 """
 
-from __future__ import unicode_literals
 from __future__ import print_function
+from __future__ import unicode_literals
 from __future__ import with_statement
-import os
-import pandas as pd
-import arrow
 
-from .helpers import freq_iso_to_pandas, find_encoding, find_dialect
-from .helpers import fix_time_index
+import arrow
+import pandas as pd
 from pydatajson.time_series import get_distribution_time_index
+
+from .helpers import fix_time_index
+from .helpers import freq_iso_to_pandas
 
 
 def load_ts_distribution(
-        catalog,
-        identifier,
-        catalog_id=None,
-        is_text_file=None,
-        is_excel_file=None,
-        is_csv_file=None,
-        file_source=None,
+    catalog,
+    identifier,
+    catalog_id=None,
+    is_text_file=None,
+    is_excel_file=None,
+    is_csv_file=None,
+    file_source=None,
 ):
     """Carga en un DataFrame una distribución de series de tiempo.
 
@@ -43,12 +43,12 @@ def load_ts_distribution(
         return generate_ts_distribution_from_text_file(catalog, identifier, catalog_id)
 
     # se scrapea a partir de un Excel con parámetros (usando otro proyecto)
-    elif is_excel_file or method == "excel_file":
+    if is_excel_file or method == "excel_file":
         print("Usar el scraper de series de tiempo.")
         return None
 
     # se lee a partir de un CSV que cumple con la especificación
-    elif is_csv_file or method == "csv_file":
+    if is_csv_file or method == "csv_file":
         file_source = file_source or distribution["downloadURL"]
         time_index = get_distribution_time_index(distribution)
 
@@ -80,8 +80,7 @@ def load_ts_distribution(
 
         return df
 
-    else:
-        raise NotImplementedError("{} no se puede leer".format(identifier))
+    raise NotImplementedError("{} no se puede leer".format(identifier))
 
 
 def get_ts_distributions_by_method(catalog, method=None):
@@ -110,23 +109,21 @@ def get_ts_distributions_by_method(catalog, method=None):
 def get_distribution_generation_method(distribution):
     # se genera a partir de un archivo de texto con parámetros
     if not distribution.get("downloadURL") and _is_text_file(
-            distribution.get("scrapingFileURL")
+        distribution.get("scrapingFileURL")
     ):
         return "text_file"
 
     # se scrapea a partir de un Excel con parámetros (usando otro proyecto)
-    elif not distribution.get("downloadURL") and _is_excel_file(
-            distribution.get("scrapingFileURL")
+    if not distribution.get("downloadURL") and _is_excel_file(
+        distribution.get("scrapingFileURL")
     ):
         return "excel_file"
 
     # se lee a partir de un CSV que cumple con la especificación
-    elif distribution.get("downloadURL"):
+    if distribution.get("downloadURL"):
         return "csv_file"
 
-    else:
-        raise NotImplementedError("{} no se puede leer".format(
-            distribution["identifier"]))
+    raise NotImplementedError("{} no se puede leer".format(distribution["identifier"]))
 
 
 def _is_text_file(path_or_url):
@@ -194,9 +191,9 @@ def _get_fields(time_field, series_id_field, values_field):
     fields = {}
 
     if (
-            str(time_field).isdigit()
-            and str(series_id_field).isdigit()
-            and str(values_field).isdigit()
+        str(time_field).isdigit()
+        and str(series_id_field).isdigit()
+        and str(values_field).isdigit()
     ):
         fields["ordinal"] = True
         default_names = {
@@ -205,7 +202,8 @@ def _get_fields(time_field, series_id_field, values_field):
             "valor": values_field,
         }
         sorted_default_names = sorted(
-            list(default_names.items()), key=lambda tup: tup[1])
+            list(default_names.items()), key=lambda tup: tup[1]
+        )
 
         fields["default_names"] = [tup[0] for tup in sorted_default_names]
         fields["time_field"] = "indice_tiempo"
@@ -223,13 +221,13 @@ def _get_fields(time_field, series_id_field, values_field):
 
 
 def get_series_df_from_panel(
-        df_panel,
-        series,
-        time_index_freq,
-        time_format="%Y-%m-%d",
-        time_field="indice_tiempo",
-        series_id_field="serie_id",
-        values_field="valor",
+    df_panel,
+    series,
+    time_index_freq,
+    time_format="%Y-%m-%d",
+    time_field="indice_tiempo",
+    series_id_field="serie_id",
+    values_field="valor",
 ):
     """Convierte tabla con id, fecha y valor en distribución de TS.
 
@@ -269,8 +267,8 @@ def get_series_df_from_panel(
         values = list(df[df[series_id_field] == serie_id][values_field])
 
         time_index, values = fix_time_index(
-            time_index, values,
-            freq_iso_to_pandas(time_index_freq, "end"))
+            time_index, values, freq_iso_to_pandas(time_index_freq, "end")
+        )
 
         return pd.Series(index=pd.to_datetime(time_index), data=values)
 

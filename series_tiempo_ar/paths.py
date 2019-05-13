@@ -45,18 +45,17 @@ def get_distribution_path(
 
     if len(distribution_csv_files) == 1:
         return distribution_csv_files[0]
-    elif len(distribution_csv_files) == 0:
+    if not distribution_csv_files:
         raise Exception(
             "Sin archivos para la distribucion {} del dataset {}\n{}".format(
                 distribution_id, dataset_id, glob_pattern
             )
         )
-    else:
-        raise Exception(
-            "{} archivos para la distribucion {} del dataset {}\n{}".format(
-                len(distribution_csv_files), distribution_id, dataset_id, glob_pattern
-            )
+    raise Exception(
+        "{} archivos para la distribucion {} del dataset {}\n{}".format(
+            len(distribution_csv_files), distribution_id, dataset_id, glob_pattern
         )
+    )
 
 
 def get_catalogs_path(catalogs_dir=CATALOGS_DIR):

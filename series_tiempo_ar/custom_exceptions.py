@@ -100,12 +100,11 @@ class BaseRepetitionError(ValueError):
             return "Hay mas de 1 {} con {} {}: {}".format(
                 entity_name, entity_type, entity_id, repeated_entities
             )
-        elif repeated_entities is not None:
+        if repeated_entities is not None:
             return "Hay {} con {} repetido: {}".format(
                 entity_name, entity_type, repeated_entities
             )
-        else:
-            raise NotImplementedError("Hace falta por lo menos repeated_entities")
+        raise NotImplementedError("Hace falta por lo menos repeated_entities")
 
 
 class FieldIdRepetitionError(BaseRepetitionError):
@@ -180,7 +179,7 @@ class DatasetIdNonExistentError(BaseNonExistentError):
 class FieldMissingInDistrbutionError(ValueError):
     def __init__(self, field, distribution):
         msg = "Campo {} faltante en la distribución {}".format(field, distribution)
-        super(ValueError, self).__init__(msg)
+        super(FieldMissingInDistrbutionError, self).__init__(msg)
 
 
 class DistributionBadDataError(ValueError):
@@ -205,7 +204,7 @@ class DistributionBadDataError(ValueError):
             time_index_size,
             values_size,
         )
-        super(ValueError, self).__init__(msg)
+        super(DistributionBadDataError, self).__init__(msg)
 
 
 class HeaderNotBlankOrIdError(ValueError):
@@ -229,7 +228,7 @@ class ScrapingStartCellsIdenticalError(ValueError):
         msg = "scrapingIdentifierCell ({}) es igual a scrapingDataStartCell ({})".format(
             scrapingIdentifierCell, scrapingDataStartCell
         )
-        super(ValueError, self).__init__(msg)
+        super(ScrapingStartCellsIdenticalError, self).__init__(msg)
 
 
 class DistributionTooManyNullSeriesError(Exception):

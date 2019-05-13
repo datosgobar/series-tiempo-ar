@@ -3,16 +3,18 @@
 
 """Módulo con métodos para hacer validaciones"""
 
-from __future__ import unicode_literals
 from __future__ import print_function
+from __future__ import unicode_literals
 from __future__ import with_statement
-import pandas as pd
-import numpy as np
-import arrow
+
 import string
-from six import text_type
+
+import arrow
+import numpy as np
+import pandas as pd
 from pandas.api.types import is_numeric_dtype
 from dateutil.parser import parse as parse_time
+from six import text_type
 
 import series_tiempo_ar.custom_exceptions as ce
 from .helpers import freq_iso_to_pandas
@@ -28,7 +30,7 @@ MAX_NULL_SERIES_PROPORTION = 0.20
 def _assert_repeated_value(field_name, field_values, exception):
     fields = pd.Series([field[field_name] for field in field_values])
     field_dups = fields[fields.duplicated()].values
-    if not len(field_dups) == 0:
+    if field_dups:
         raise exception(repeated_fields=field_dups)
 
 
@@ -131,7 +133,7 @@ def validate_using_temporal(df, dataset_meta):
         # 4. Las series deben comenzar después del valor inicial de "temporal"
         for time_value in df.index:
             time_value = arrow.get(time_value.year, time_value.month, time_value.day)
-            if not time_value >= arrow.get(ini_temporal):
+            if time_value < arrow.get(ini_temporal):
                 iso_time_value = time_value.isoformat()
                 iso_ini_temporal = arrow.get(ini_temporal).isoformat()
                 raise ce.TimeValueBeforeTemporalError(iso_time_value, iso_ini_temporal)
@@ -255,7 +257,7 @@ def validate_header_cell_field_id_or_blank(xl, worksheet, headers_coord, headers
         ws_header_value = xl.wb[worksheet][header_coord].value
         if (
             ws_header_value
-            and len(text_type(ws_header_value).strip()) > 0
+            and text_type(ws_header_value).strip()
             and ws_header_value != header_value
         ):
             raise ce.HeaderNotBlankOrIdError(
