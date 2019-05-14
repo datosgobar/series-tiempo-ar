@@ -69,7 +69,7 @@
             },
             {
               "distribution_identifier": "125.1",
-              "description": "Descripción de la serie 2",
+              "description": "Descripción de la serie 1",
               "title": "title2",
               "dataset_identifier": "125",
               "scrapingIdentifierCell": "DS8",
