@@ -1,23 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""Módulo con métodos para hacer validaciones"""
-
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import with_statement
-
 import string
 
 import arrow
 import numpy as np
 import pandas as pd
-from pandas.api.types import is_numeric_dtype
+from pandas.core.dtypes.common import is_numeric_dtype
 from dateutil.parser import parse as parse_time
-from six import text_type
 
-import series_tiempo_ar.custom_exceptions as ce
-from .helpers import freq_iso_to_pandas
+from series_tiempo_ar import custom_exceptions as ce
+from series_tiempo_ar.helpers import freq_iso_to_pandas
 
 MINIMUM_VALUES = 2
 MAX_MISSING_PROPORTION = 0.999
@@ -119,7 +109,6 @@ def validate_missing_values(df, _distrib_meta, _catalog):
             raise ce.FieldTooManyMissingsError(field, missing_values, positive_values)
 
 
-# noinspection PyUnresolvedReferences
 def validate_using_temporal(df, dataset_meta):
     # realiza validaciones usando el campo "temporal" de metadadta del dataset
 
@@ -242,30 +231,6 @@ def validate_df_shape(df, distrib_meta, _catalog):
         )
 
 
-def validate_header_cell_field_id(xl, worksheet, headers_coord, headers_value):
-    # Las celdas de los headers deben estar en blanco o contener un id
-    for header_coord, header_value in zip(headers_coord, headers_value):
-        ws_header_value = xl.wb[worksheet][header_coord].value
-        if ws_header_value != header_value:
-            raise ce.HeaderIdError(
-                worksheet, header_coord, header_value, ws_header_value
-            )
-
-
-def validate_header_cell_field_id_or_blank(xl, worksheet, headers_coord, headers_value):
-    # Las celdas de los headers deben estar en blanco o contener un id
-    for header_coord, header_value in zip(headers_coord, headers_value):
-        ws_header_value = xl.wb[worksheet][header_coord].value
-        if (
-            ws_header_value
-            and text_type(ws_header_value).strip()
-            and ws_header_value != header_value
-        ):
-            raise ce.HeaderNotBlankOrIdError(
-                worksheet, header_coord, header_value, ws_header_value
-            )
-
-
 def validate_no_repeated_fields_in_distribution(_df, distrib_meta, _catalog):
     """Verifica que los ID de los fields no estén repetidos dentro de
     la misma distribución
@@ -280,49 +245,3 @@ def validate_no_repeated_fields_in_distribution(_df, distrib_meta, _catalog):
             raise ce.FieldIdRepetitionError(repeated_fields=_id)
 
         fields.add(_id)
-
-
-def validate_distinct_scraping_start_cells(_df, distrib_meta):
-    for field in distrib_meta.get("field"):
-        if field.get("scrapingIdentifierCell") == field.get("scrapingDataStartCell"):
-            raise ce.ScrapingStartCellsIdenticalError(
-                field.get("scrapingIdentifierCell"), field.get("scrapingDataStartCell")
-            )
-
-
-def validate_distribution(df, catalog, _dataset_meta, distrib_meta, _=None):
-
-    # validaciones sólo de metadatos
-    validate_field_id(df, distrib_meta, catalog)
-    validate_no_repeated_fields(df, distrib_meta, catalog)
-    validate_no_repeated_titles(df, distrib_meta, catalog)
-    validate_no_repeated_descriptions(df, distrib_meta, catalog)
-    validate_no_repeated_fields_in_distribution(df, distrib_meta, catalog)
-
-    # validaciones de headers
-    validate_field_title(df, distrib_meta, catalog)
-    validate_title_length(df, distrib_meta, catalog)
-
-    # validaciones de los valores de las series
-    validate_missing_fields(df, distrib_meta, catalog)
-    validate_values_are_numeric(df, distrib_meta, catalog)
-    validate_distribution_null_series_amount(df, distrib_meta, catalog)
-    validate_field_few_values(df, distrib_meta, catalog)
-    validate_df_shape(df, distrib_meta, catalog)
-
-    # deprecada: queda cubierta por `validate_distribution_null_series_amount`
-    # validate_missing_values(df)
-
-
-def validate_distribution_scraping(
-    xl, worksheet, headers_coord, headers_value, distrib_meta, force_ids=True
-):
-
-    if force_ids:
-        validate_header_cell_field_id(xl, worksheet, headers_coord, headers_value)
-    else:
-        validate_header_cell_field_id_or_blank(
-            xl, worksheet, headers_coord, headers_value
-        )
-
-    validate_distinct_scraping_start_cells(None, distrib_meta)

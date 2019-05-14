@@ -4,7 +4,7 @@ from series_tiempo_ar.custom_exceptions import (
     FieldIdRepetitionError,
     FieldDescriptionRepetitionError,
 )
-from series_tiempo_ar.validator import get_distribution_errors
+from series_tiempo_ar.validations import get_distribution_errors
 from tests.helpers import read_data_json
 
 
