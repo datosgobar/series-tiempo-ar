@@ -24,16 +24,6 @@ def _assert_repeated_value(field_name, field_values, exception):
         raise exception(repeated_fields=field_dups)
 
 
-def validate_future_time(df):
-    # No debe haber fechas futuras
-    for time_value in df.index:
-        time_value = arrow.get(time_value.year, time_value.month, time_value.day)
-        if not time_value.year <= arrow.now().year:
-            iso_time_value = time_value.isoformat()
-            iso_now = arrow.now().isoformat()
-            raise ce.TimeIndexFutureTimeValueError(iso_time_value, iso_now)
-
-
 def validate_field_few_values(df, _distrib_meta, _catalog):
     # La mayoría de las series de una distrib. deben tener un mínimo de valores
     series_too_small = 0
@@ -107,42 +97,6 @@ def validate_missing_values(df, _distrib_meta, _catalog):
         missing_values_prop = missing_values / float(total_values)
         if not missing_values_prop <= MAX_MISSING_PROPORTION:
             raise ce.FieldTooManyMissingsError(field, missing_values, positive_values)
-
-
-def validate_using_temporal(df, dataset_meta):
-    # realiza validaciones usando el campo "temporal" de metadadta del dataset
-
-    # sólo chequea el uso de temporal, si este existe
-    if "temporal" in dataset_meta:
-        try:
-            ini_temporal, end_temporal = dataset_meta["temporal"].split("/")
-            parse_time(ini_temporal)
-            parse_time(end_temporal)
-        except Exception:
-            raise ce.DatasetTemporalMetadataError(dataset_meta["temporal"])
-        # 4. Las series deben comenzar después del valor inicial de "temporal"
-        for time_value in df.index:
-            time_value = arrow.get(time_value.year, time_value.month, time_value.day)
-            if time_value < arrow.get(ini_temporal):
-                iso_time_value = time_value.isoformat()
-                iso_ini_temporal = arrow.get(ini_temporal).isoformat()
-                raise ce.TimeValueBeforeTemporalError(iso_time_value, iso_ini_temporal)
-
-        # 5. Las series deben terminar después de la mitad del rango "temporal"
-        half_temporal = (
-            arrow.get(ini_temporal)
-            + (arrow.get(end_temporal) - arrow.get(ini_temporal))
-            / MIN_TEMPORAL_FRACTION
-        )
-        end_time_value_str = "{}-{}-{}".format(
-            df.index[-1].year, df.index[-1].month, df.index[-1].day
-        )
-        iso_end_index = arrow.get(end_time_value_str).isoformat()
-        iso_half_temporal = half_temporal.isoformat()
-        if not arrow.get(end_time_value_str) >= half_temporal:
-            raise ce.TimeIndexTooShortError(
-                iso_end_index, iso_half_temporal, dataset_meta["temporal"]
-            )
 
 
 def validate_no_repeated_fields(_df, distrib_meta, catalog):
