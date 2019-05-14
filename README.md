@@ -7,7 +7,7 @@
 [![Stories in Ready](https://badge.waffle.io/datosgobar/series-tiempo-ar.png?label=ready&title=Ready)](https://waffle.io/datosgobar/series-tiempo-ar)
 [![Documentation Status](http://readthedocs.org/projects/series-tiempo-ar/badge/?version=latest)](http://series-tiempo-ar.readthedocs.org/en/latest/?badge=latest)
 
-* Versión python: 2
+* Versión python: 3.6+
 * Licencia: MIT license
 * Documentación: [https://series-tiempo-ar.readthedocs.io](https://series-tiempo-ar.readthedocs.io)
 
