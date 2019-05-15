@@ -12,10 +12,14 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import with_statement
 
+import io
+
 import arrow
 import pandas as pd
+import requests
 from pydatajson.time_series import get_distribution_time_index
 
+from series_tiempo_ar.utils.url_validator import URLValidator
 from .helpers import fix_time_index
 from .helpers import freq_iso_to_pandas
 
@@ -50,6 +54,10 @@ def load_ts_distribution(
     # se lee a partir de un CSV que cumple con la especificación
     if is_csv_file or method == "csv_file":
         file_source = file_source or distribution["downloadURL"]
+        if URLValidator().is_valid(file_source):
+            data = requests.get(file_source, verify=False).content
+            file_source = io.StringIO(data.decode("utf-8"))
+
         time_index = get_distribution_time_index(distribution)
 
         try:

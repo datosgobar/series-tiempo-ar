@@ -9,9 +9,9 @@ class URLValidatorTests(TestCase):
         self.assertTrue(URLValidator().is_valid(url))
 
     def test_invalid_url(self):
-        url = 'not an url'
+        url = "not an url"
         self.assertFalse(URLValidator().is_valid(url))
 
     def test_validate_file(self):
-        url = '/path/to/a/file.csv'
+        url = "/path/to/a/file.csv"
         self.assertFalse(URLValidator().is_valid(url))
