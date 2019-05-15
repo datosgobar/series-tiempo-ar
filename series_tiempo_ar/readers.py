@@ -54,7 +54,7 @@ def load_ts_distribution(
     # se lee a partir de un CSV que cumple con la especificación
     if is_csv_file or method == "csv_file":
         file_source = file_source or distribution["downloadURL"]
-        if URLValidator().is_valid(file_source):
+        if URLValidator(file_source).is_valid():
             data = requests.get(file_source, verify=False).content
             file_source = io.StringIO(data.decode("utf-8"))
 
