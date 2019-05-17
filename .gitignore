@@ -66,3 +66,5 @@ target/
 .DS_Store
 .idea/
 .ipynb_checkpoints
+examples/series-null-description.csv
+examples/series-null-units.csv
