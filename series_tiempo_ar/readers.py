@@ -56,42 +56,43 @@ def load_ts_distribution(
         file_source = file_source or distribution["downloadURL"]
         if URLValidator(file_source).is_valid():
             data = requests.get(file_source, verify=False).content
-            file_source = io.StringIO(data.decode("utf-8"))
-
+            file_source = io.BytesIO(data)
+        else:
+            file_source = open(file_source, "rb")
         time_index = get_distribution_time_index(distribution)
 
-        try:
-            df = pd.read_csv(
-                file_source,
-                index_col=time_index,
-                parse_dates=[time_index],
-                date_parser=lambda x: arrow.get(x, "YYYY-MM-DD").datetime
-                # encoding="utf-8"
-            )
-        except arrow.parser.ParserError:
-            try:
-                df = pd.read_csv(
-                    file_source,
-                    index_col=time_index,
-                    parse_dates=[time_index],
-                    date_parser=lambda x: arrow.get(x, "YYYY-MM").datetime
-                    # encoding="utf-8"
-                )
-            except arrow.parser.ParserError:
-                try:
-                    df = pd.read_csv(
-                        file_source,
-                        index_col=time_index,
-                        parse_dates=[time_index],
-                        date_parser=lambda x: arrow.get(x, "YYYY").datetime
-                        # encoding="utf-8"
-                    )
-                except arrow.parser.ParserError:
-                    raise Exception("El formato de fecha no es válido.")
+        date_parsers = [
+            lambda x: arrow.get(x, "YYYY-MM-DD").datetime,
+            lambda x: arrow.get(x, "YYYY-MM").datetime,
+            lambda x: arrow.get(x, "YYYY").datetime,
+        ]
 
-        return df
+        for date_parser in date_parsers:
+            try:
+                return read_csv(file_source, time_index, date_parser)
+            except arrow.parser.ParserError:
+                continue
+        raise Exception("El formato de fecha no es válido.")
 
     raise NotImplementedError("{} no se puede leer".format(identifier))
+
+
+def read_csv(url_or_filepath, time_index, date_parser):
+    return read_csv_with_encoding(
+        url_or_filepath,
+        index_col=time_index,
+        parse_dates=[time_index],
+        date_parser=date_parser,
+    )
+
+
+def read_csv_with_encoding(url_or_filepath, *args, **kwargs):
+    url_or_filepath.seek(0)
+    try:
+        return pd.read_csv(url_or_filepath, *args, **kwargs, encoding="utf8")
+    except UnicodeDecodeError:
+        url_or_filepath.seek(0)
+        return pd.read_csv(url_or_filepath, *args, **kwargs, encoding="latin1")
 
 
 def get_ts_distributions_by_method(catalog, method=None):
