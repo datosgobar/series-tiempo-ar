@@ -237,3 +237,11 @@ class DistributionTooManyNullSeriesError(Exception):
             distribution, max_allowed_proportion, null_proportion
         )
         super(DistributionTooManyNullSeriesError, self).__init__(msg)
+
+
+class NonExistentDescriptionError(Exception):
+    def __init__(self, distribution_id):
+        msg = "Existen fields sin descripción en la distribución {}".format(
+            distribution_id
+        )
+        super(NonExistentDescriptionError, self).__init__(msg)
