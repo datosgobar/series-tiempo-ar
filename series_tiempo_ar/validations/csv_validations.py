@@ -199,3 +199,14 @@ def validate_no_repeated_fields_in_distribution(_df, distrib_meta, _catalog):
             raise ce.FieldIdRepetitionError(repeated_fields=_id)
 
         fields.add(_id)
+
+
+def validate_field_descriptions(_df, distrib_meta, _catalog):
+    fields = [
+        x
+        for x in distrib_meta.get("field", [])
+        if not x.get("specialType") == "time_index"
+    ]
+    for field in fields:
+        if "description" not in field:
+            raise ce.NonExistentDescriptionError(distrib_meta["identifier"])
