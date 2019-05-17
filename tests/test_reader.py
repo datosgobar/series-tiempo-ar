@@ -2,8 +2,7 @@ import os
 from unittest import TestCase
 
 from series_tiempo_ar.readers import read_csv
-
-SAMPLES_DIR = os.path.join(os.path.dirname(__file__), "samples")
+from tests import SAMPLES_DIR
 
 
 class CSVReaderTests(TestCase):

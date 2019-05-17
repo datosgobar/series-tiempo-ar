@@ -17,11 +17,10 @@ from pydatajson import DataJson
 
 import series_tiempo_ar.custom_exceptions as ce
 from series_tiempo_ar.validations import validate_distribution
+from tests import SAMPLES_DIR
 
 
 class SeriesTiempoArTestCase(unittest.TestCase):
-    SAMPLES_DIR = os.path.join("tests", "samples")
-
     def setUp(self):
         pass
 
@@ -29,7 +28,7 @@ class SeriesTiempoArTestCase(unittest.TestCase):
         pass
 
     def test_validate(self):
-        catalog = os.path.join(self.SAMPLES_DIR, "data.json")
+        catalog = os.path.join(SAMPLES_DIR, "data.json")
         catalog = DataJson(catalog)
         distrib_meta = catalog.get_distribution(identifier="125.1")
         df = pd.read_csv(
@@ -42,7 +41,7 @@ class SeriesTiempoArTestCase(unittest.TestCase):
         validate_distribution(df, catalog, dataset_meta, distrib_meta)
 
     def test_validate_business_date(self):
-        catalog = os.path.join(self.SAMPLES_DIR, "data_business_days.json")
+        catalog = os.path.join(SAMPLES_DIR, "data_business_days.json")
         catalog = DataJson(catalog)
         identifier = "133.1"
         distribution = catalog.get_distribution(identifier=identifier)
@@ -56,7 +55,7 @@ class SeriesTiempoArTestCase(unittest.TestCase):
 
     @raises(ce.FieldIdRepetitionError)
     def test_repeated_field_id(self):
-        catalog = os.path.join(self.SAMPLES_DIR, "repeated_field_id.json")
+        catalog = os.path.join(SAMPLES_DIR, "repeated_field_id.json")
         catalog = DataJson(catalog)
         identifier = "125.1"
         distribution = catalog.get_distribution(identifier=identifier)

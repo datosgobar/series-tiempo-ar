@@ -1,10 +1,7 @@
 import os
 
-from pydatajson import DataJson
-
 from series_tiempo_ar import TimeSeriesDataJson
-
-SAMPLES_DIR = os.path.join(os.path.dirname(__file__), "samples")
+from tests import SAMPLES_DIR
 
 
 def read_data_json(file_name):
