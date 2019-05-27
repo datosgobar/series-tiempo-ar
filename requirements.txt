@@ -1,5 +1,5 @@
 arrow
 pandas
 python-dateutil
-pydatajson>=0.4.34
+-e git+git://github.com/datosgobar/pydatajson@fb96e267481b9a3257cf28dffb670e7bfa53b6d9#egg=pydatajson
 six
