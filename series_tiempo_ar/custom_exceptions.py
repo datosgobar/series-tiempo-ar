@@ -8,7 +8,17 @@ from __future__ import print_function
 from __future__ import with_statement
 
 
-class InvalidNumericField(ValueError):
+class TimeSeriesError(ValueError):
+    def __init__(self, *args):
+        super(TimeSeriesError, self).__init__(*args)
+        self.message = args[0]
+        self.validator = "time_series_format"
+        self.path = []
+        self.validator_value = None
+        self.instance = None
+
+
+class InvalidNumericField(TimeSeriesError):
     def __init__(self, field_title, values):
         msg = "'{}' tiene valores no numericos: '{}'".format(
             field_title, " ".join(list(values))
@@ -16,7 +26,7 @@ class InvalidNumericField(ValueError):
         super(InvalidNumericField, self).__init__(msg)
 
 
-class FieldTitleTooLongError(ValueError):
+class FieldTitleTooLongError(TimeSeriesError):
     def __init__(self, field, field_len, max_field_len):
         msg = "'{}' tiene '{}' caracteres. Maximo: '{}'".format(
             field, field_len, max_field_len
@@ -24,7 +34,7 @@ class FieldTitleTooLongError(ValueError):
         super(FieldTitleTooLongError, self).__init__(msg)
 
 
-class InvalidFieldTitleError(ValueError):
+class InvalidFieldTitleError(TimeSeriesError):
     def __init__(self, field, char=None, valid_field_chars=None, is_unnamed=None):
         if is_unnamed:
             msg = "Existe un campo sin nombre en la distribucion: '{}'"
@@ -39,7 +49,7 @@ class InvalidFieldTitleError(ValueError):
         super(InvalidFieldTitleError, self).__init__(msg)
 
 
-class InvalidFieldIdError(ValueError):
+class InvalidFieldIdError(TimeSeriesError):
     def __init__(self, field_id, char, valid_field_chars):
         msg = "'{}' usa caracteres invalidos ('{}'). Validos: '{}'".format(
             field_id, char, valid_field_chars
@@ -47,13 +57,13 @@ class InvalidFieldIdError(ValueError):
         super(InvalidFieldIdError, self).__init__(msg)
 
 
-class TimeIndexFutureTimeValueError(ValueError):
+class TimeIndexFutureTimeValueError(TimeSeriesError):
     def __init__(self, iso_time_value, iso_now):
         msg = "{} es fecha futura respecto de {}".format(iso_time_value, iso_now)
         super(TimeIndexFutureTimeValueError, self).__init__(msg)
 
 
-class FieldFewValuesError(ValueError):
+class FieldFewValuesError(TimeSeriesError):
     def __init__(self, field, positive_values, minimum_values):
         msg = "{} tiene {} valores, deberia tener {} o mas".format(
             field, positive_values, minimum_values
@@ -61,7 +71,7 @@ class FieldFewValuesError(ValueError):
         super(FieldFewValuesError, self).__init__(msg)
 
 
-class FieldTooManyMissingsError(ValueError):
+class FieldTooManyMissingsError(TimeSeriesError):
     def __init__(self, field, missing_values, positive_values):
         msg = "{} tiene mas missings ({}) que valores ({})".format(
             field, missing_values, positive_values
@@ -69,13 +79,13 @@ class FieldTooManyMissingsError(ValueError):
         super(FieldTooManyMissingsError, self).__init__(msg)
 
 
-class DatasetTemporalMetadataError(ValueError):
+class DatasetTemporalMetadataError(TimeSeriesError):
     def __init__(self, temporal):
         msg = "{} no es un formato de 'temporal' valido".format(temporal)
         super(DatasetTemporalMetadataError, self).__init__(msg)
 
 
-class TimeValueBeforeTemporalError(ValueError):
+class TimeValueBeforeTemporalError(TimeSeriesError):
     def __init__(self, iso_time_value, iso_ini_temporal):
         msg = "Serie comienza ({}) antes de 'temporal' ({}) ".format(
             iso_time_value, iso_ini_temporal
@@ -83,7 +93,7 @@ class TimeValueBeforeTemporalError(ValueError):
         super(TimeValueBeforeTemporalError, self).__init__(msg)
 
 
-class TimeIndexTooShortError(ValueError):
+class TimeIndexTooShortError(TimeSeriesError):
     def __init__(self, iso_end_index, iso_half_temporal, temporal):
         msg = "Serie termina ({}) antes de mitad de 'temporal' ({}) {}".format(
             iso_end_index, iso_half_temporal, temporal
@@ -91,7 +101,7 @@ class TimeIndexTooShortError(ValueError):
         super(TimeIndexTooShortError, self).__init__(msg)
 
 
-class BaseRepetitionError(ValueError):
+class BaseRepetitionError(TimeSeriesError):
 
     """El id de una entidad está repetido en el catálogo."""
 
@@ -145,7 +155,7 @@ class DatasetIdRepetitionError(BaseRepetitionError):
         super(DatasetIdRepetitionError, self).__init__(msg)
 
 
-class BaseNonExistentError(ValueError):
+class BaseNonExistentError(TimeSeriesError):
     @staticmethod
     def get_msg(entity_name, entity_type, entity_id):
         """El id de una entidad no existe en el catálogo."""
@@ -176,13 +186,13 @@ class DatasetIdNonExistentError(BaseNonExistentError):
         super(DatasetIdNonExistentError, self).__init__(msg)
 
 
-class FieldMissingInDistrbutionError(ValueError):
+class FieldMissingInDistrbutionError(TimeSeriesError):
     def __init__(self, field, distribution):
         msg = "Campo {} faltante en la distribución {}".format(field, distribution)
         super(FieldMissingInDistrbutionError, self).__init__(msg)
 
 
-class DistributionBadDataError(ValueError):
+class DistributionBadDataError(TimeSeriesError):
     def __init__(
         self,
         distribution_id,
@@ -207,7 +217,7 @@ class DistributionBadDataError(ValueError):
         super(DistributionBadDataError, self).__init__(msg)
 
 
-class HeaderNotBlankOrIdError(ValueError):
+class HeaderNotBlankOrIdError(TimeSeriesError):
     def __init__(self, worksheet, header_coord, header_value, ws_header_value):
         msg = "'{}' en hoja '{}' tiene '{}'. Debe ser vacio o '{}'".format(
             header_coord, worksheet, ws_header_value, header_value
@@ -215,7 +225,7 @@ class HeaderNotBlankOrIdError(ValueError):
         super(HeaderNotBlankOrIdError, self).__init__(msg)
 
 
-class HeaderIdError(ValueError):
+class HeaderIdError(TimeSeriesError):
     def __init__(self, worksheet, header_coord, header_value, ws_header_value):
         msg = "'{}' en hoja '{}' tiene '{}'. Debe ser '{}'".format(
             header_coord, worksheet, ws_header_value, header_value
@@ -223,7 +233,7 @@ class HeaderIdError(ValueError):
         super(HeaderIdError, self).__init__(msg)
 
 
-class ScrapingStartCellsIdenticalError(ValueError):
+class ScrapingStartCellsIdenticalError(TimeSeriesError):
     def __init__(self, scrapingIdentifierCell, scrapingDataStartCell):
         msg = "scrapingIdentifierCell ({}) es igual a scrapingDataStartCell ({})".format(
             scrapingIdentifierCell, scrapingDataStartCell
@@ -231,7 +241,7 @@ class ScrapingStartCellsIdenticalError(ValueError):
         super(ScrapingStartCellsIdenticalError, self).__init__(msg)
 
 
-class DistributionTooManyNullSeriesError(Exception):
+class DistributionTooManyNullSeriesError(TimeSeriesError):
     def __init__(self, distribution, max_allowed_proportion, null_proportion):
         msg = "Proporción de series nulas en distribución {} por encima del umbral permitido ({}): {}".format(
             distribution, max_allowed_proportion, null_proportion
@@ -239,7 +249,7 @@ class DistributionTooManyNullSeriesError(Exception):
         super(DistributionTooManyNullSeriesError, self).__init__(msg)
 
 
-class NonExistentDescriptionError(Exception):
+class NonExistentDescriptionError(TimeSeriesError):
     def __init__(self, distribution_id):
         msg = "Existen fields sin descripción en la distribución {}".format(
             distribution_id

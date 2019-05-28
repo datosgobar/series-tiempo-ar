@@ -1,5 +1,5 @@
 arrow
 pandas
 python-dateutil
-pydatajson>=0.4.34
+pydatajson>=0.4.40
 six

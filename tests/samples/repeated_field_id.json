@@ -57,7 +57,7 @@
           "issued": "2017-09-28T00:00:00",
           "title": "Distribución ejemplo",
           "modified": "2017-09-28T00:00:00",
-          "fileName": "Índice-precios-internos-basicos-al-por-mayor-desagregado-base-1993-anual.csv",
+          "fileName": "indice-precios-internos-basicos-al-por-mayor-desagregado-base-1993-anual.csv",
           "downloadURL": "http://localhost:3456/tests/samples/sample_data.csv",
           "field": [
             {
