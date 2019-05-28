@@ -1,4 +1,19 @@
 {
+  "modified": "2017-09-28",
+  "issued": "2017-09-28",
+  "title": "Datos Programación Macroeconómica",
+  "spatial": "ARG",
+  "language": [
+    "SPA"
+  ],
+  "rights": "2017-09-28",
+  "license": "Creative Commons Attribution 4.0",
+  "description": "Catálogo de datos abiertos de la Subsecretaría de Programación Macroeconómica.",
+  "superThemeTaxonomy": "http://datos.gob.ar/superThemeTaxonomy.json",
+  "publisher": {
+    "mbox": "datoseconomicos@mecon.gov.ar",
+    "name": "Subsecretaría de Programación Macroeconómica."
+  },
   "dataset": [
     {
       "publisher": {
@@ -10,7 +25,6 @@
       "superTheme": [
         "ECON"
       ],
-      "title": "Índice de Precios Internos Básicos al por Mayor (IPIB) hasta cuatro dígitos",
       "language": [
         "SPA"
       ],
@@ -69,13 +83,13 @@
             },
             {
               "distribution_identifier": "125.1",
-              "description": "Descripción de la serie 1",
+              "description": "Descripción de la serie 2",
               "title": "title2",
               "dataset_identifier": "125",
               "scrapingIdentifierCell": "DS8",
               "units": "Índice 1993=100",
               "type": "number",
-              "id": "id_serie_1",
+              "id": "id_serie_2",
               "scrapingDataStartCell": "DS9"
             }
           ],
