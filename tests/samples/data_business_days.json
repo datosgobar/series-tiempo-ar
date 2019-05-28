@@ -43,7 +43,7 @@
           "title": "Cotizaciones respecto al dólar de Estados Unidos. Valores Diarios.",
           "modified": "2017-09-28T00:00:00",
           "fileName": "cotizaciones-divisas-algunos-paises-con-respecto-al-dolar-estados-unidos-frecuencia-diaria.csv",
-          "downloadURL": "tests/samples/data_business_days.csv",
+          "downloadURL": "http://localhost:3456/tests/samples/data_business_days.csv",
           "field": [
             {
               "distribution_identifier": "133.1",

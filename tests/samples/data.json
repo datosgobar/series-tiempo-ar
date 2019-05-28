@@ -43,7 +43,7 @@
           "title": "Índice de Precios Internos Básicos al por Mayor IProducto Interno Bruto a cuatro dígitos. Base 1993",
           "modified": "2017-09-28T00:00:00",
           "fileName": "Índice-precios-internos-basicos-al-por-mayor-desagregado-base-1993-anual.csv",
-          "downloadURL": "tests/samples/test_data.csv",
+          "downloadURL": "http://localhost:3456/tests/samples/test_data.csv",
           "field": [
             {
               "distribution_identifier": "125.1",
