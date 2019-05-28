@@ -73,9 +73,10 @@ $ mkdir tests/temp
 
 **Correr la suite de tests:**
 
-```bash
-$ nosetests
-```
+Correr todos los pasos de testeo (pruebas, estilos de código)
+`$ scripts/run_all.sh`
+
+La rutina de pruebas utiliza un servidor web en el puerto 3456. Asegurarse de que ese puerto esté disponible antes de correr el script.
 
 ## Contacto
 
