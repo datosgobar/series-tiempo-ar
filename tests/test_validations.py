@@ -21,3 +21,9 @@ class ValidationsTests(TestCase):
         validation = catalog.validate_catalog()
 
         self.assertEqual(validation["status"], "ERROR")
+
+    def test_missing_field_identifier(self):
+        catalog = read_data_json("missing_dataset_title.json")
+        validation = catalog.validate_catalog()
+
+        self.assertEqual(validation["status"], "ERROR")

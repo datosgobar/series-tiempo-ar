@@ -5,7 +5,7 @@
 
 # pylint: disable=W0614
 # pylint: disable=W0401
-
+from series_tiempo_ar.custom_exceptions import TimeSeriesError
 from series_tiempo_ar.validations.xlsx_validations import *
 from . import csv_validations
 
@@ -37,7 +37,7 @@ def get_distribution_errors(catalog, distribution_id):
     for validation in CSV_VALIDATIONS:
         try:
             validation(df, distribution, catalog)
-        except Exception as e:
+        except TimeSeriesError as e:
             errors.append(e)
 
     return errors
