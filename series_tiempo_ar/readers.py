@@ -32,6 +32,7 @@ def load_ts_distribution(
     is_excel_file=None,
     is_csv_file=None,
     file_source=None,
+    verify_ssl=False,
 ):
     """Carga en un DataFrame una distribución de series de tiempo.
 
@@ -55,7 +56,7 @@ def load_ts_distribution(
     if is_csv_file or method == "csv_file":
         file_source = file_source or distribution["downloadURL"]
         if URLValidator(file_source).is_valid():
-            data = requests.get(file_source, verify=False).content
+            data = requests.get(file_source, verify=verify_ssl).content
             file_source = io.BytesIO(data)
         else:
             file_source = open(file_source, "rb")
