@@ -54,3 +54,6 @@ class TimeSeriesDataJson(DataJson):
         self.generate_distribution_ids()
 
     load_ts_distribution = readers.load_ts_distribution
+
+    def validate_time_series_catalog(self):
+        return {"status": "OK"}
