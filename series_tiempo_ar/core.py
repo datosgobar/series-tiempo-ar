@@ -57,9 +57,12 @@ class TimeSeriesDataJson(DataJson):
     load_ts_distribution = readers.load_ts_distribution
 
     def validate_time_series_catalog(self):
-        errors = []
+        errors = {}
 
         for distribution in self.get_distributions(only_time_series=True):
-            errors.extend(get_distribution_errors(self, distribution.get("identifier")))
+            identifier = distribution.get("identifier")
+            distribution_errors = get_distribution_errors(self, identifier)
+            if distribution_errors:
+                errors[identifier] = distribution_errors
 
-        return {"status": "OK" if not errors else "ERROR", "errors": {}}
+        return {"status": "OK" if not errors else "ERROR", "errors": errors}

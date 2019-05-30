@@ -21,3 +21,9 @@ class ValidateTimeSeriesCatalogTests(TestCase):
         validation = catalog.validate_time_series_catalog()
 
         self.assertFalse(validation["errors"])
+
+    def test_invalid_catalog_has_errors(self):
+        catalog = read_data_json("repeated_field_id.json")
+        validation = catalog.validate_time_series_catalog()
+
+        self.assertTrue(validation["errors"]["125.1"])
