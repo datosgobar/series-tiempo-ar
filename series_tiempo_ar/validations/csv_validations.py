@@ -133,7 +133,8 @@ def validate_values_are_numeric(df, distrib_meta, _catalog):
     fields_title = [
         field["title"]
         for field in distrib_meta["field"]
-        if "specialType" not in field or field["specialType"] != "time_index"
+        if ("specialType" not in field or field["specialType"] != "time_index")
+        and field["title"] in list(df.columns)
     ]
     for field_title in fields_title:
         if not is_numeric_dtype(df[field_title]):
