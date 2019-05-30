@@ -23,6 +23,7 @@ from __future__ import with_statement
 from pydatajson import DataJson
 
 from series_tiempo_ar.time_series_validator import TimeSeriesValidator
+from series_tiempo_ar.validations import get_distribution_errors
 from .paths import SCHEMAS_DIR
 from . import readers
 
@@ -56,4 +57,9 @@ class TimeSeriesDataJson(DataJson):
     load_ts_distribution = readers.load_ts_distribution
 
     def validate_time_series_catalog(self):
-        return {"status": "OK"}
+        errors = []
+
+        for distribution in self.get_distributions(only_time_series=True):
+            errors.extend(get_distribution_errors(self, distribution.get("identifier")))
+
+        return {"status": "OK" if not errors else "ERROR"}
