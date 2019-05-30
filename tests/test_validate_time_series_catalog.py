@@ -15,3 +15,9 @@ class ValidateTimeSeriesCatalogTests(TestCase):
         validation = catalog.validate_time_series_catalog()
 
         self.assertEqual(validation["status"], "ERROR")
+
+    def test_valid_catalog_has_empty_errors(self):
+        catalog = read_data_json("valid_catalog.json")
+        validation = catalog.validate_time_series_catalog()
+
+        self.assertFalse(validation["errors"])

@@ -62,4 +62,4 @@ class TimeSeriesDataJson(DataJson):
         for distribution in self.get_distributions(only_time_series=True):
             errors.extend(get_distribution_errors(self, distribution.get("identifier")))
 
-        return {"status": "OK" if not errors else "ERROR"}
+        return {"status": "OK" if not errors else "ERROR", "errors": {}}
