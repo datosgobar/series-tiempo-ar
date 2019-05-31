@@ -1,4 +1,19 @@
 {
+  "modified": "2017-09-28",
+  "issued": "2017-09-28",
+  "title": "Datos Programación Macroeconómica",
+  "spatial": "ARG",
+  "language": [
+    "SPA"
+  ],
+  "rights": "2017-09-28",
+  "license": "Creative Commons Attribution 4.0",
+  "description": "Catálogo de datos abiertos de la Subsecretaría de Programación Macroeconómica.",
+  "superThemeTaxonomy": "http://datos.gob.ar/superThemeTaxonomy.json",
+  "publisher": {
+    "mbox": "datoseconomicos@mecon.gov.ar",
+    "name": "Subsecretaría de Programación Macroeconómica."
+  },
   "dataset": [
     {
       "publisher": {
@@ -42,8 +57,8 @@
           "issued": "2017-09-28T00:00:00",
           "title": "Distribución ejemplo",
           "modified": "2017-09-28T00:00:00",
-          "fileName": "Índice-precios-internos-basicos-al-por-mayor-desagregado-base-1993-anual.csv",
-          "downloadURL": "tests/samples/sample_data.csv",
+          "fileName": "indice-precios-internos-basicos-al-por-mayor-desagregado-base-1993-anual.csv",
+          "downloadURL": "http://localhost:3456/tests/samples/sample_data.csv",
           "field": [
             {
               "distribution_identifier": "125.1",
