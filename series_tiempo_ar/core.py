@@ -54,9 +54,27 @@ class TimeSeriesDataJson(DataJson):
 
         self.generate_distribution_ids()
 
-    load_ts_distribution = readers.load_ts_distribution
-
     def validate_time_series_catalog(self):
         errors = self.validator.get_catalog_errors(self)
 
         return {"status": "OK" if not errors else "ERROR", "errors": errors}
+
+    def load_ts_distribution(
+        self,
+        identifier,
+        catalog_id=None,
+        is_text_file=None,
+        is_excel_file=None,
+        is_csv_file=None,
+        file_source=None,
+    ):
+        return readers.load_ts_distribution(
+            self,
+            identifier,
+            catalog_id,
+            is_text_file,
+            is_excel_file,
+            is_csv_file,
+            file_source,
+            self.verify_ssl,
+        )
