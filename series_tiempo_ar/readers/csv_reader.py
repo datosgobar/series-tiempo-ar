@@ -2,9 +2,9 @@ import pandas as pd
 
 
 class CSVReader:
-
-    def __init__(self, file_path):
-        self.file_path = file_path
+    def __init__(self, distribution):
+        self.distribution = distribution
 
     def read(self):
-        return pd.read_csv(self.file_path)
+        download_url = self.distribution["downloadURL"]
+        return pd.read_csv(download_url)
