@@ -19,8 +19,8 @@ import pandas as pd
 import requests
 from pydatajson.time_series import get_distribution_time_index
 
-from series_tiempo_ar.text_file_reader import generate_ts_distribution_from_text_file
 from series_tiempo_ar.utils.url_validator import URLValidator
+from .text_file_reader import generate_ts_distribution_from_text_file
 
 
 def load_ts_distribution(
