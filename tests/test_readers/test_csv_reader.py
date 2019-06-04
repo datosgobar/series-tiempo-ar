@@ -1,3 +1,4 @@
+import os
 from unittest import TestCase
 
 from series_tiempo_ar.readers.csv_reader import CSVReader
@@ -18,3 +19,10 @@ class CSVReaderTests(TestCase):
         df = CSVReader(distribution).read()
 
         self.assertIn("tasas_interés_call", list(df.columns))
+
+    def test_read_from_file_source(self):
+        data_json = read_data_json("daily_periodicity_latin1.json")
+        distribution = data_json.get_distributions()[0]
+        path = csv_path("sample_data.csv")
+        df = CSVReader(distribution, file_source=path).read()
+        self.assertIn("title1", list(df.columns))
