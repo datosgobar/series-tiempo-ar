@@ -22,10 +22,13 @@ from __future__ import with_statement
 
 from pydatajson import DataJson
 
+from series_tiempo_ar.readers.csv_reader import CSVReader
+from series_tiempo_ar.readers.readers import get_distribution_generation_method
+from series_tiempo_ar.readers.text_file_reader import (
+    generate_ts_distribution_from_text_file,
+)
 from series_tiempo_ar.time_series_validator import TimeSeriesValidator
-from series_tiempo_ar.validations import get_distribution_errors
 from .paths import SCHEMAS_DIR
-from . import readers
 
 DEFAULT_CATALOG_SCHEMA_FILENAME = "catalog.json"
 
@@ -68,13 +71,15 @@ class TimeSeriesDataJson(DataJson):
         is_csv_file=None,
         file_source=None,
     ):
-        return readers.load_ts_distribution(
-            self,
-            identifier,
-            catalog_id,
-            is_text_file,
-            is_excel_file,
-            is_csv_file,
-            file_source,
-            self.verify_ssl,
-        )
+        distribution = self.get_distribution(identifier)
+        method = get_distribution_generation_method(distribution)
+
+        # se genera a partir de un archivo de texto con parámetros
+        if is_text_file or method == "text_file":
+            return generate_ts_distribution_from_text_file(self, identifier, catalog_id)
+
+        # se lee a partir de un CSV que cumple con la especificación
+        if is_csv_file or method == "csv_file":
+            return CSVReader(distribution, self.verify_ssl, file_source).read()
+
+        raise NotImplementedError("{} no se puede leer".format(identifier))
