@@ -19,20 +19,11 @@ class CSVReader:
                 f.seek(0)
                 return pd.read_csv(f, encoding="latin1")
 
-    @contextmanager
     def read_distribution(self):
         if self.file_source:
-            fd = open(self.file_source, "rb")
-            try:
-                yield fd
-            finally:
-                fd.close()
-        else:
-            data = requests.get(
-                self.distribution["downloadURL"], verify=self.verify_ssl
-            ).content
-            file_source = io.BytesIO(data)
-            try:
-                yield file_source
-            finally:
-                file_source.close()
+            return open(self.file_source, "rb")
+
+        data = requests.get(
+            self.distribution["downloadURL"], verify=self.verify_ssl
+        ).content
+        return io.BytesIO(data)
