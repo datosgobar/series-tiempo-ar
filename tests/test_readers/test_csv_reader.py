@@ -1,4 +1,3 @@
-import os
 from unittest import TestCase
 
 from series_tiempo_ar.readers.csv_reader import CSVReader
@@ -26,3 +25,10 @@ class CSVReaderTests(TestCase):
         path = csv_path("sample_data.csv")
         df = CSVReader(distribution, file_source=path).read()
         self.assertIn("title1", list(df.columns))
+
+    def test_data_frame_has_time_index(self):
+        data_json = read_data_json("valid_catalog.json")
+        distribution = data_json.get_distributions()[0]
+        df = CSVReader(distribution).read()
+
+        self.assertEqual(str(df.index[0].date()), "2000-01-01")

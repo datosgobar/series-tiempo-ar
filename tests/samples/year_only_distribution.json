@@ -58,14 +58,14 @@
           "title": "Distribución ejemplo",
           "modified": "2017-09-28T00:00:00",
           "fileName": "indice-precios-internos-basicos-al-por-mayor-desagregado-base-1993-anual.csv",
-          "downloadURL": "http://localhost:3456/tests/samples/daily_periodicity_latin1.csv",
+          "downloadURL": "http://localhost:3456/tests/samples/year_only_distribution.csv",
           "field": [
             {
               "distribution_identifier": "125.1",
               "title": "indice_tiempo",
               "dataset_identifier": "125",
               "scrapingIdentifierCell": "A8",
-              "specialTypeDetail": "R/P1D",
+              "specialTypeDetail": "R/P1Y",
               "specialType": "time_index",
               "type": "date",
               "id": "time_index",
@@ -74,7 +74,7 @@
             {
               "distribution_identifier": "125.1",
               "description": "Descripción de la serie 1",
-              "title": "tasas_interés_call",
+              "title": "title1",
               "dataset_identifier": "125",
               "scrapingIdentifierCell": "DS8",
               "units": "Índice 1993=100",
@@ -85,22 +85,13 @@
             {
               "distribution_identifier": "125.1",
               "description": "Descripción de la serie 2",
-              "title": "tasas_interés_badlar",
+              "title": "title2",
               "dataset_identifier": "125",
               "scrapingIdentifierCell": "DS8",
               "units": "Índice 1993=100",
               "type": "number",
-              "id": "id_serie_2"
-            },
-            {
-              "distribution_identifier": "125.1",
-              "description": "Descripción de la serie 3",
-              "title": "tasas_interés_pm",
-              "dataset_identifier": "125",
-              "scrapingIdentifierCell": "DS8",
-              "units": "Índice 1993=100",
-              "type": "number",
-              "id": "id_serie_3"
+              "id": "id_serie_2",
+              "scrapingDataStartCell": "DS9"
             }
           ],
           "draft": false,
