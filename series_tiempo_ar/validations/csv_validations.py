@@ -1,10 +1,8 @@
 import string
 
-import arrow
 import numpy as np
 import pandas as pd
 from pandas.core.dtypes.common import is_numeric_dtype
-from dateutil.parser import parse as parse_time
 
 from series_tiempo_ar import custom_exceptions as ce
 from series_tiempo_ar.helpers import freq_iso_to_pandas

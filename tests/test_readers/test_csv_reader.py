@@ -32,3 +32,10 @@ class CSVReaderTests(TestCase):
         df = CSVReader(distribution).read()
 
         self.assertEqual(str(df.index[0].date()), "2000-01-01")
+
+    def test_read_year_only_distribution(self):
+        data_json = read_data_json("year_only_distribution.json")
+        distribution = data_json.get_distributions()[0]
+        df = CSVReader(distribution).read()
+
+        self.assertEqual(str(df.index[0].date()), "2000-01-01")
