@@ -56,26 +56,12 @@ $ pip install series-tiempo-ar
 $ pip install -e .
 ```
 
-## Uso
+## Uso y desarrollo
 
-*Este paquete todavía está en desarrollo incipiente y su funcionalidad no está documentada ni lista para ser distribuida.*
+Ver [Docuemntación](./docs/README.md)
 
-## Tests
+*Este paquete todavía está en desarrollo incipiente y su funcionalidad puede estar sujeta a cambios futuros.*
 
-Los tests se corren con `nose`. Desde la raíz del repositorio:
-
-**Configuración inicial:**
-
-```bash
-$ pip install -r requirements_dev.txt
-$ mkdir tests/temp
-```
-
-**Correr la suite de tests:**
-
-```bash
-$ nosetests
-```
 
 ## Contacto
 

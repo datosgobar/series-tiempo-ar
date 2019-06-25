@@ -7,7 +7,7 @@
 [![Stories in Ready](https://badge.waffle.io/datosgobar/series-tiempo-ar.png?label=ready&title=Ready)](https://waffle.io/datosgobar/series-tiempo-ar)
 [![Documentation Status](http://readthedocs.org/projects/series-tiempo-ar/badge/?version=latest)](http://series-tiempo-ar.readthedocs.org/en/latest/?badge=latest)
 
-* Versión python: 2
+* Versión python: 3.6+ (0.3)
 * Licencia: MIT license
 * Documentación: https://series-tiempo-ar.readthedocs.io
 
@@ -58,7 +58,7 @@ $ pip install -e .
 
 ## Uso
 
-*Este paquete todavía está en desarrollo incipiente y su funcionalidad no está documentada ni lista para ser distribuida.*
+Se provee una clase `TimeSeriesDataJson` como abstracción sobre un catálogo que cumple el Perfil de Metadatos. Éste catálogo extiende las funcionalidades de `pydatajson`, y provee métodos adicionales para trabajar con datos de series de tiempo. Ver [referencia](./reference.md)
 
 ## Tests
 
