@@ -33,7 +33,7 @@ A partir de esta especificación, se desarrollaron aplicaciones para extraer y c
 
 * [`series-tiempo-ar`](https://github.com/datosgobar/series-tiempo-ar): Paquete de módulos con funcionalidades para extraer, transformar y analizar series de tiempo basados en la versión 1.1 del [`Perfil de Metadatos`](http://paquete-apertura-datos.readthedocs.io/es/stable/guia_metadatos.html) del [`Paquete de Apertura de Datos de la República Argentina`](http://paquete-apertura-datos.readthedocs.io). Es una extensión de [`pydatajson`](https://github.com/datosgobar/pydatajson) y la dependencia principal de los otros repositorios del proyecto.
 
-* [`series-tiempo-ar-etl`](https://github.com/datosgobar/series-tiempo-ar-etl): Rutinas de ETL usadas para compilar diariamente la `Base de Series de Tiempo de la Administración Pública Nacional <http://datos.gob.ar/dataset/base-series-tiempo-administracion-publica-nacional>`_.
+* [`series-tiempo-ar-etl`](https://github.com/datosgobar/series-tiempo-ar-etl): Rutinas de ETL usadas para compilar diariamente la [`Base de Series de Tiempo de la Administración Pública Nacional`](http://datos.gob.ar/dataset/base-series-tiempo-administracion-publica-nacional). **Este proyecto está agendado para su discontinuación**
 
 * [`series-tiempo-ar-api`](https://github.com/datosgobar/series-tiempo-ar-api): Aplicación basada en Django que extrae series de tiempo de los catálogos de datos abiertos de la Red de Nodos y las indexa en un motor Elastic Search para su consumo como servicio web.
 

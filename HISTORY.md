@@ -1,6 +1,16 @@
 Versiones
 ===
 
+0.3.0 (2019-06-25)
+------------------
+
+* Primer release estable de la librería. Agrega métodos adicionales de validaciones, y centraliza la lectura de distribuciones en el método `TimeSeriesDataJson.load_ts_distribution`
+
+0.2.3 (2019-03-01)
+------------------
+
+* Actualizado de validaciones para distribuciones CSV
+
 0.1.4 (2018-05-06)
 ------------------
 

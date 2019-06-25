@@ -1,4 +1,4 @@
-History
+Versiones
 ===
 
 0.3.0 (2019-06-25)
@@ -6,11 +6,30 @@ History
 
 * Primer release estable de la librería. Agrega métodos adicionales de validaciones, y centraliza la lectura de distribuciones en el método `TimeSeriesDataJson.load_ts_distribution`
 
-
 0.2.3 (2019-03-01)
 ------------------
 
 * Actualizado de validaciones para distribuciones CSV
+
+0.1.4 (2018-05-06)
+------------------
+
+* Flexibiliza la restricción de series demasiado cortas: ahora se admite hasta un 2% del total de las series de una distribución con una cantidad demasiado baja de valores para ser una serie.
+
+0.1.3 (2018-05-04)
+------------------
+
+* Actualiza las validaciones al schema de la versión 0.4.12 de pydatajson
+
+0.1.2 (2018-04-30)
+------------------
+
+* El campo `temporal` en dataset pasa a ser de uso opcional.
+
+0.1.0 (2018-04-17)
+------------------
+
+* Soporte para Python 3
 
 0.0.3 (2017-10-18)
 ------------------

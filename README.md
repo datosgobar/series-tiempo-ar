@@ -7,9 +7,9 @@
 [![Stories in Ready](https://badge.waffle.io/datosgobar/series-tiempo-ar.png?label=ready&title=Ready)](https://waffle.io/datosgobar/series-tiempo-ar)
 [![Documentation Status](http://readthedocs.org/projects/series-tiempo-ar/badge/?version=latest)](http://series-tiempo-ar.readthedocs.org/en/latest/?badge=latest)
 
-* Versión python: 3.6+
+* Versión python: 3.6+ (0.3)
 * Licencia: MIT license
-* Documentación: [https://series-tiempo-ar.readthedocs.io](https://series-tiempo-ar.readthedocs.io)
+* Documentación: https://series-tiempo-ar.readthedocs.io
 
 El proyecto Series de Tiempo se basa en una extensión del perfil de metadatos de la política de apertura. Esta fue diseñada para facilitar la publicación de series de tiempo de organismos gubernamentales que son parte de la Red de Nodos de Datos Abiertos de la República Argentina.
 
@@ -56,12 +56,27 @@ $ pip install series-tiempo-ar
 $ pip install -e .
 ```
 
-## Uso y desarrollo
+## Uso
 
-Ver [Docuemntación](./docs/README.md)
+Se provee una clase `TimeSeriesDataJson` como abstracción sobre un catálogo que cumple el Perfil de Metadatos. Éste catálogo extiende las funcionalidades de `pydatajson`, y provee métodos adicionales para trabajar con datos de series de tiempo. Ver [referencia](./reference.md)
 
-*Este paquete todavía está en desarrollo incipiente y su funcionalidad puede estar sujeta a cambios futuros.*
+## Tests
 
+Los tests se corren con `nose`. Desde la raíz del repositorio:
+
+**Configuración inicial:**
+
+```bash
+$ pip install -r requirements_dev.txt
+$ mkdir tests/temp
+```
+
+**Correr la suite de tests:**
+
+Correr todos los pasos de testeo (pruebas, estilos de código)
+`$ scripts/run_all.sh`
+
+La rutina de pruebas utiliza un servidor web en el puerto 3456. Asegurarse de que ese puerto esté disponible antes de correr el script.
 
 ## Contacto
 

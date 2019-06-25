@@ -20,6 +20,7 @@ setup(
     version="0.3.0",
     description="Módulos para extraer, analizar y compilar series de tiempo documentadas en catálogos de datos abiertos basados en el perfil de metadatos del Paquete de Apertura de Datos.",
     long_description=readme + "\n\n" + history,
+    long_description_content_type='text/markdown',
     author="Datos Argentina",
     author_email="datos@modernizacion.gob.ar",
     url="https://github.com/datosgobar/series-tiempo-ar",
