@@ -18,6 +18,7 @@ from pydatajson import DataJson
 import series_tiempo_ar.custom_exceptions as ce
 from series_tiempo_ar.validations import validate_distribution
 from tests import SAMPLES_DIR
+from tests.helpers import read_data_json
 
 
 class SeriesTiempoArTestCase(unittest.TestCase):
@@ -66,6 +67,11 @@ class SeriesTiempoArTestCase(unittest.TestCase):
         ).set_index("indice_tiempo")
 
         validate_distribution(df, catalog, dataset, distribution)
+
+    def test_xlsx_read(self):
+        catalog = read_data_json("catalog.xlsx")
+
+        self.assertTrue(catalog.get_distributions())
 
 
 if __name__ == "__main__":

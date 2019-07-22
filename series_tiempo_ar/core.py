@@ -43,6 +43,7 @@ class TimeSeriesDataJson(DataJson):
         schema_dir=None,
         default_values=None,
         validator_class=TimeSeriesValidator,
+        catalog_format=None,
     ):
         schema_filename = schema_filename or DEFAULT_CATALOG_SCHEMA_FILENAME
         schema_dir = schema_dir or SCHEMAS_DIR
@@ -53,6 +54,7 @@ class TimeSeriesDataJson(DataJson):
             schema_dir=schema_dir,
             default_values=default_values,
             validator_class=validator_class,
+            catalog_format=catalog_format,
         )
 
         self.generate_distribution_ids()
