@@ -114,7 +114,7 @@ class BaseRepetitionError(TimeSeriesError):
             return "Hay {} con {} repetido: {}".format(
                 entity_name, entity_type, repeated_entities
             )
-        raise NotImplementedError("Hace falta por lo menos repeated_entities")
+        return "Hace falta por lo menos repeated_entities"
 
 
 class FieldIdRepetitionError(BaseRepetitionError):
