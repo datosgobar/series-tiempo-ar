@@ -1,5 +1,11 @@
 Versiones
 ===
+0.3.1 (2019-07-23)
+------------------
+
+* Parámetro para fozar el formato de un catálogo
+* Fix construyendo los errores de validación  
+
 
 0.3.0 (2019-06-25)
 ------------------
