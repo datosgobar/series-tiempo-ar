@@ -53,6 +53,9 @@ lint: ## check style with flake8
 test: ## run tests quickly with the default Python
 	sh scripts/run_all.sh
 
+style:
+	black series_tiempo_ar/ tests/
+
 test-all: ## run tests on every Python version with tox
 	tox
 
