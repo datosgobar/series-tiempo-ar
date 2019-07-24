@@ -1,11 +1,15 @@
 Versiones
 ===
+0.3.2 (2019-07-24)
+------------------
+
+* Agrego parámetro opcional en TimeSeriesDataJson.load_ts_distribution() para poder cargar una distribución de TXT que no re-descargue la fuente original, sino que la busque en un path local.
+
 0.3.1 (2019-07-23)
 ------------------
 
 * Parámetro para fozar el formato de un catálogo
 * Fix construyendo los errores de validación  
-
 
 0.3.0 (2019-06-25)
 ------------------

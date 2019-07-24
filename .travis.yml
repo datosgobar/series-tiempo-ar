@@ -30,6 +30,7 @@ notifications:
   slack: ssipyga:yyz0hyWmiaoGGnprhjqDXUwk
 python:
 - '3.6'
+- '3.7'
 script:
 - sh scripts/run_all.sh
 sudo: false

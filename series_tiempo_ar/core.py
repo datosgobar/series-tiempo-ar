@@ -78,7 +78,8 @@ class TimeSeriesDataJson(DataJson):
 
         # se genera a partir de un archivo de texto con parámetros
         if is_text_file or method == "text_file":
-            return generate_ts_distribution_from_text_file(self, identifier, catalog_id)
+            return generate_ts_distribution_from_text_file(
+                self, identifier, catalog_id, file_source=file_source)
 
         # se lee a partir de un CSV que cumple con la especificación
         if is_csv_file or method == "csv_file":

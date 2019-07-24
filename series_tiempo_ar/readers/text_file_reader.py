@@ -3,7 +3,8 @@ import pandas as pd
 from series_tiempo_ar.helpers import freq_iso_to_pandas, fix_time_index
 
 
-def generate_ts_distribution_from_text_file(catalog, identifier, catalog_id=None):
+def generate_ts_distribution_from_text_file(
+        catalog, identifier, catalog_id=None, file_source=None):
     distribution = catalog.get_distribution(identifier)
     frequency = catalog.get_distribution_time_index_frequency(distribution)
     catalog_id = catalog_id or catalog.get("identifier")
@@ -11,7 +12,7 @@ def generate_ts_distribution_from_text_file(catalog, identifier, catalog_id=None
     # parámetros de lectura del archivo de texto
     sep = distribution["scrapingFileSeparator"]
     encoding = distribution["scrapingFileEncoding"]
-    path = distribution["scrapingFileURL"]
+    path = file_source or distribution["scrapingFileURL"]
     time_format = distribution["scrapingFileTimeFormat"]
     fields = _get_fields(
         distribution["scrapingFileTimeField"],
@@ -108,7 +109,8 @@ def get_series_df_from_panel(
     """
 
     # parsea el campo de fechas al tipo datetime
-    df_panel[time_field] = pd.to_datetime(df_panel[time_field], format=time_format)
+    df_panel[time_field] = pd.to_datetime(
+        df_panel[time_field], format=time_format)
 
     # se queda solo con las series elegidas
     df = df_panel[df_panel[series_id_field].isin(series.keys())]
@@ -135,7 +137,8 @@ def get_series_df_from_panel(
 
         return pd.Series(index=pd.to_datetime(time_index), data=values)
 
-    data = {series[serie_id]: get_single_series(serie_id) for serie_id in series}
+    data = {series[serie_id]: get_single_series(
+        serie_id) for serie_id in series}
 
     df_series = pd.DataFrame(index=period_range, data=data)
 
