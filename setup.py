@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
+try:
+    from setuptools import setup, Extension
+except ImportError:
+    from distutils.core import setup
 
 with open("README.md") as readme_file:
     readme = readme_file.read()
