@@ -1,5 +1,10 @@
 Versiones
 ===
+0.3.3 (2019-08-08)
+------------------
+
+* Modifica forma de convertir paneles en distribuciones de series, más eficiente pero con menos control de errores de la fuente original. Ahora es más eficiente.
+
 0.3.2 (2019-07-24)
 ------------------
 

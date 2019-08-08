@@ -56,9 +56,9 @@ def _get_fields(time_field, series_id_field, values_field):
     fields = {}
 
     if (
-        str(time_field).isdigit()
-        and str(series_id_field).isdigit()
-        and str(values_field).isdigit()
+        str(time_field).isdigit() and
+        str(series_id_field).isdigit() and
+        str(values_field).isdigit()
     ):
         fields["ordinal"] = True
         default_names = {
@@ -110,7 +110,8 @@ def get_series_df_from_panel(
     """
 
     # parsea el campo de fechas al tipo datetime
-    df_panel[time_field] = pd.to_datetime(df_panel[time_field], format=time_format)
+    df_panel[time_field] = pd.to_datetime(
+        df_panel[time_field], format=time_format)
 
     # se queda solo con las series elegidas
     df = df_panel[df_panel[series_id_field].isin(series.keys())]
@@ -122,23 +123,27 @@ def get_series_df_from_panel(
         freq=freq_iso_to_pandas(time_index_freq),
     )
 
-    def get_single_series(serie_id):
-        time_values = df[df[series_id_field] == serie_id][time_field]
-        time_period = pd.PeriodIndex(
-            time_values, freq=freq_iso_to_pandas(time_index_freq, "end")
-        )
-        time_index = time_period.to_timestamp()
+    # cambia ids por titulos que sean nombres de campos al pivotar
+    df["serie_id"] = df.serie_id.apply(series.get)
 
-        values = list(df[df[series_id_field] == serie_id][values_field])
+    # convierte el panel en una tabla de series de tiempo
+    data = df.pivot_table(
+        columns="serie_id",
+        index="indice_tiempo",
+        values="valor"
+    )
 
-        time_index, values = fix_time_index(
-            time_index, values, freq_iso_to_pandas(time_index_freq, "end")
-        )
+    # convierte el indice de tiempo a comienzos de periodos
+    try:
+        data.index = data.index.to_period(
+            freq=freq_iso_to_pandas(time_index_freq, "start")
+        ).to_timestamp()
+    except Exception as e:
+        data.index = data.index.to_period(
+            freq=freq_iso_to_pandas(time_index_freq, "end")
+        ).to_timestamp()
 
-        return pd.Series(index=pd.to_datetime(time_index), data=values)
-
-    data = {series[serie_id]: get_single_series(serie_id) for serie_id in series}
-
+    # completa indice de tiempo con periodos faltante para que sea continuo
     df_series = pd.DataFrame(index=period_range, data=data)
 
     return df_series
