@@ -34,7 +34,7 @@ def generate_ts_distribution_from_text_file(
     # prependeado para volverlos únicos dentro de la base completa, ahora los
     # ids de las series son los mismos que el archivo original del publicador
     series = {
-        ts["id"].replace(catalog_id + "-", ""): ts["title"]
+        ts["id"].replace(catalog_id + "_", ""): ts["title"]
         for ts in catalog.get_time_series(distribution_identifier=identifier)
     }
 
