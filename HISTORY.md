@@ -1,5 +1,11 @@
 Versiones
 ===
+
+0.3.4 (2019-09-06)
+------------------
+
+* Cambia "-" por "_" para el id compuesto de series que se leen de un archivo de texto plano que contiene una base de series de tiempo.
+
 0.3.3 (2019-08-08)
 ------------------
 
