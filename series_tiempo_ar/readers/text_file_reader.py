@@ -55,15 +55,15 @@ def generate_ts_distribution_from_text_file(
 def _get_fields(time_field, series_id_field, values_field):
     fields = {}
 
-    if (
-        str(time_field).isdigit() and
-        str(series_id_field).isdigit() and
-        str(values_field).isdigit()
-    ):
+    try:
+        time_field = int(time_field)
+        series_id_field = int(series_id_field)
+        values_field = int(values_field)
+
         fields["ordinal"] = True
         default_names = {
-            "serie_id": series_id_field,
             "indice_tiempo": time_field,
+            "serie_id": series_id_field,
             "valor": values_field,
         }
         sorted_default_names = sorted(
@@ -75,7 +75,7 @@ def _get_fields(time_field, series_id_field, values_field):
         fields["series_id_field"] = "serie_id"
         fields["values_field"] = "valor"
 
-    else:
+    except:
         fields["ordinal"] = False
         fields["default_names"] = ["serie_id", "indice_tiempo", "valor"]
         fields["time_field"] = time_field

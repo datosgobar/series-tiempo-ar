@@ -1,6 +1,11 @@
 Versiones
 ===
 
+0.3.5 (2019-09-09)
+------------------
+
+* Corrige identificación de parámetros de scraping para que sea más robusto a problemas de texto / número en Excels.
+
 0.3.4 (2019-09-06)
 ------------------
 
