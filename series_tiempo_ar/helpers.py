@@ -66,8 +66,7 @@ def fix_time_index(time_values, values, frequency):
         # cuando tiene valores anteriores, comienza a buscar errores
         # corregibles
         else:
-            expected_current = increment_period(
-                previous_time_value, 1, frequency)
+            expected_current = increment_period(previous_time_value, 1, frequency)
             expected_next = increment_period(previous_time_value, 2, frequency)
 
             # arregla período incorrecto, si anterior y siguiente son correctos
@@ -88,10 +87,8 @@ def fix_time_index(time_values, values, frequency):
                         previous_time_value, 1, frequency
                     )
 
-                    expected_current = increment_period(
-                        expected_current, 1, frequency)
-                    expected_next = increment_period(
-                        expected_next, 1, frequency)
+                    expected_current = increment_period(expected_current, 1, frequency)
+                    expected_next = increment_period(expected_next, 1, frequency)
 
             # agrega a la lista el nuevo valor, una vez corregido
             new_time_values.append(deepcopy(current_time_value))
@@ -106,8 +103,7 @@ def fix_time_index(time_values, values, frequency):
     new_time_values.append(deepcopy(next_time_value))
     new_values.append(deepcopy(next_value))
 
-    new_time_values_str = [value.format("YYYY-MM-DD")
-                           for value in new_time_values]
+    new_time_values_str = [value.format("YYYY-MM-DD") for value in new_time_values]
 
     return new_time_values_str, new_values
 
