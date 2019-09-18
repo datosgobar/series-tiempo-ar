@@ -19,7 +19,7 @@ def _assert_repeated_value(field_name, field_values, exception):
     fields = pd.Series([field[field_name] for field in field_values])
     field_dups = fields[fields.duplicated()].values
     if field_dups.size > 0:
-        raise exception(repeated_fields=field_dups)
+        raise exception(field_dups)
 
 
 def validate_field_few_values(df, _distrib_meta, _catalog):
@@ -36,8 +36,7 @@ def validate_field_few_values(df, _distrib_meta, _catalog):
 
         # chequea si hay demasiadas series cortas
         if float(series_too_small) / series_total > MAX_TOO_SMALL_PROPORTION:
-            raise ce.FieldFewValuesError(
-                field, not_null_values, MINIMUM_VALUES)
+            raise ce.FieldFewValuesError(field, not_null_values, MINIMUM_VALUES)
 
 
 def validate_distribution_null_series_amount(df, distrib_meta, _catalog):
@@ -84,8 +83,7 @@ def validate_title_length(df, _distrib_meta, _catalog):
     # Los nombres de los campos tienen que tener un máximo de caracteres
     for field in df.columns:
         if len(field) > MAX_FIELD_TITLE_LEN:
-            raise ce.FieldTitleTooLongError(
-                field, len(field), MAX_FIELD_TITLE_LEN)
+            raise ce.FieldTitleTooLongError(field, len(field), MAX_FIELD_TITLE_LEN)
 
 
 def validate_missing_values(df, _distrib_meta, _catalog):
@@ -96,8 +94,7 @@ def validate_missing_values(df, _distrib_meta, _catalog):
         missing_values = total_values - positive_values
         missing_values_prop = missing_values / float(total_values)
         if not missing_values_prop <= MAX_MISSING_PROPORTION:
-            raise ce.FieldTooManyMissingsError(
-                field, missing_values, positive_values)
+            raise ce.FieldTooManyMissingsError(field, missing_values, positive_values)
 
 
 def validate_no_repeated_fields(_df, distrib_meta, catalog):
@@ -125,10 +122,8 @@ def validate_no_repeated_titles(_df, distrib_meta, _catalog):
 
 def validate_no_repeated_descriptions(_df, distrib_meta, _catalog):
     # 8. Las descripciones de fields no deben repetirse en una distribución
-    fields = [field for field in distrib_meta[
-        "field"] if "description" in field]
-    _assert_repeated_value("description", fields,
-                           ce.FieldDescriptionRepetitionError)
+    fields = [field for field in distrib_meta["field"] if "description" in field]
+    _assert_repeated_value("description", fields, ce.FieldDescriptionRepetitionError)
 
 
 def validate_values_are_numeric(df, distrib_meta, _catalog):
@@ -152,8 +147,7 @@ def validate_missing_fields(df, distrib_meta, _catalog):
     ]
     for field in fields:
         if field not in df:
-            raise ce.FieldMissingInDistrbutionError(
-                field, distrib_meta["identifier"])
+            raise ce.FieldMissingInDistrbutionError(field, distrib_meta["identifier"])
 
 
 def validate_df_shape(df, distrib_meta, _catalog):
@@ -201,7 +195,7 @@ def validate_no_repeated_fields_in_distribution(_df, distrib_meta, _catalog):
             continue
 
         if field.get("id") in fields:
-            raise ce.FieldIdRepetitionError(repeated_fields=_id)
+            raise ce.FieldIdRepetitionError(_id)
 
         fields.add(_id)
 
