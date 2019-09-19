@@ -110,8 +110,7 @@ def get_series_df_from_panel(
     """
 
     # parsea el campo de fechas al tipo datetime
-    df_panel[time_field] = pd.to_datetime(
-        df_panel[time_field], format=time_format)
+    df_panel[time_field] = pd.to_datetime(df_panel[time_field], format=time_format)
 
     # se queda solo con las series elegidas
     df = df_panel[df_panel[series_id_field].isin(series.keys())]
@@ -127,11 +126,7 @@ def get_series_df_from_panel(
     df["serie_id"] = df.serie_id.apply(series.get)
 
     # convierte el panel en una tabla de series de tiempo
-    data = df.pivot_table(
-        columns="serie_id",
-        index="indice_tiempo",
-        values="valor"
-    )
+    data = df.pivot_table(columns="serie_id", index="indice_tiempo", values="valor")
 
     # convierte el indice de tiempo a comienzos de periodos
     try:

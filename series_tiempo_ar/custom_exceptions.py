@@ -105,21 +105,19 @@ class BaseRepetitionError(TimeSeriesError):
 
     """El id de una entidad está repetido en el catálogo."""
 
-    def get_msg(self, entity_name, entity_type, entity_id=None, repeated_entities=None):
-        if entity_id and repeated_entities is not None:
+    def get_msg(self, entity_name, entity_type, repeated_entities, entity_id=None):
+        if entity_id is not None:
             return "Hay mas de 1 {} con {} {}: {}".format(
                 entity_name, entity_type, entity_id, repeated_entities
             )
-        if repeated_entities is not None:
-            return "Hay {} con {} repetido: {}".format(
-                entity_name, entity_type, repeated_entities
-            )
-        return "Hace falta por lo menos repeated_entities"
+        return "Hay {} con {} repetido: {}".format(
+            entity_name, entity_type, repeated_entities
+        )
 
 
 class FieldIdRepetitionError(BaseRepetitionError):
-    def __init__(self, field_id=None, repeated_fields=None):
-        msg = self.get_msg("field", "id", field_id, repeated_fields)
+    def __init__(self, repeated_fields, field_id=None):
+        msg = self.get_msg("field", "id", repeated_fields, field_id)
         super(FieldIdRepetitionError, self).__init__(msg)
 
 
@@ -127,8 +125,8 @@ class FieldTitleRepetitionError(BaseRepetitionError):
 
     """Hay un campo repetido en la distribución."""
 
-    def __init__(self, field_title=None, repeated_fields=None):
-        msg = self.get_msg("field", "title", field_title, repeated_fields)
+    def __init__(self, repeated_fields, field_title=None):
+        msg = self.get_msg("field", "title", repeated_fields, field_title)
         super(FieldTitleRepetitionError, self).__init__(msg)
 
 
@@ -136,22 +134,22 @@ class FieldDescriptionRepetitionError(BaseRepetitionError):
 
     """Hay un campo repetido en la distribución."""
 
-    def __init__(self, field_desc=None, repeated_fields=None):
-        msg = self.get_msg("field", "description", field_desc, repeated_fields)
+    def __init__(self, repeated_fields, field_desc=None):
+        msg = self.get_msg("field", "description", repeated_fields, field_desc)
         super(FieldDescriptionRepetitionError, self).__init__(msg)
 
 
 class DistributionIdRepetitionError(BaseRepetitionError):
-    def __init__(self, distribution_id=None, repeated_distributions=None):
+    def __init__(self, repeated_distributions, distribution_id=None):
         msg = self.get_msg(
-            "distribution", "id", distribution_id, repeated_distributions
+            "distribution", "id", repeated_distributions, distribution_id
         )
         super(DistributionIdRepetitionError, self).__init__(msg)
 
 
 class DatasetIdRepetitionError(BaseRepetitionError):
-    def __init__(self, dataset_id=None, repeated_datasets=None):
-        msg = self.get_msg("dataset", "id", dataset_id, repeated_datasets)
+    def __init__(self, repeated_datasets, dataset_id=None):
+        msg = self.get_msg("dataset", "id", repeated_datasets, dataset_id)
         super(DatasetIdRepetitionError, self).__init__(msg)
 
 
