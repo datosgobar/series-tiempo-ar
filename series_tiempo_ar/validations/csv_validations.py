@@ -107,9 +107,9 @@ def validate_no_repeated_fields(_df, distrib_meta, catalog):
                 and distribution["identifier"] != distrib_meta["identifier"]
             ):
                 for field in distribution["field"]:
-                    if field["title"] != "indice_tiempo" and "id" in field:
+                    if field.get("title") != "indice_tiempo" and "id" in field:
                         field_ids.append(field["id"])
-    for field_distrib in distrib_meta["field"]:
+    for field_distrib in distrib_meta.get("field", []):
         if "id" in field_distrib and field_distrib["id"] in field_ids:
             raise ce.FieldIdRepetitionError(field_distrib["id"])
 
