@@ -20,7 +20,7 @@ with open("requirements_dev.txt") as f:
 
 setup(
     name="series-tiempo-ar",
-    version="0.3.5",
+    version="0.3.6",
     description="Módulos para extraer, analizar y compilar series de tiempo documentadas en catálogos de datos abiertos basados en el perfil de metadatos del Paquete de Apertura de Datos.",
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/markdown",

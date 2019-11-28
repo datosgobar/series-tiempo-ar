@@ -64,6 +64,7 @@ class TimeSeriesDataJson(DataJson):
 
         return {"status": "OK" if not errors else "ERROR", "errors": errors}
 
+    # pylint: disable=W0613
     def load_ts_distribution(
         self,
         identifier,
