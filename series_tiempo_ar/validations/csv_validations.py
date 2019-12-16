@@ -50,7 +50,7 @@ def _assert_repeated_value(field_name, field_values, exception):
 
 
 class BaseValidation:
-    def __init__(self, df, distrib_meta, catalog, options=None):
+    def __init__(self, df=None, distrib_meta=None, catalog=None, options=None):
         if options is None:
             options = ValidationOptions(**DEFAULT_OPTIONS)
 

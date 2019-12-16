@@ -19,7 +19,7 @@ class TestFieldFewValues(TestCase):
     def test_validation_one_value_is_invalid(self):
         df = CSVReader(self.distribution, file_source=csv_path("few_values.csv")).read()
         with self.assertRaises(FieldFewValuesError):
-            FieldViewValuesValidation(df, None, None).validate()
+            FieldViewValuesValidation(df).validate()
 
     def test_validation_with_custom_minimum_values(self):
         df = CSVReader(self.distribution, file_source=csv_path("few_values.csv")).read()
@@ -36,4 +36,4 @@ class TestFieldFewValues(TestCase):
 
         # Siempre es válido
         options = ValidationOptions.create_with_defaults(max_too_small_proportion=1.01)
-        FieldViewValuesValidation(df, None, None, options=options).validate()
+        FieldViewValuesValidation(df, options=options).validate()

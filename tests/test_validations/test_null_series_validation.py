@@ -28,5 +28,5 @@ class TestNullSeriesValidation(TestCase):
             max_null_series_proportion=1.1
         )  # Se permite 100% null
         DistributionNullSeriesValidation(
-            df, self.distribution, None, options=options
+            df, self.distribution, options=options
         ).validate()

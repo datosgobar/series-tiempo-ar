@@ -22,7 +22,7 @@ class TestTitleLengthValidation(TestCase):
             file_source=csv_path("70_character_long_column_title.csv"),
         ).read()
         with self.assertRaises(FieldTitleTooLongError):
-            TitleLengthValidation(df, None, None).validate()
+            TitleLengthValidation(df).validate()
 
     def test_custom_length(self):
         df = CSVReader(
@@ -30,4 +30,4 @@ class TestTitleLengthValidation(TestCase):
             file_source=csv_path("70_character_long_column_title.csv"),
         ).read()
         options = ValidationOptions.create_with_defaults(max_field_title_len=71)
-        TitleLengthValidation(df, None, None, options=options).validate()
+        TitleLengthValidation(df, options=options).validate()

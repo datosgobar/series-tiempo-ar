@@ -20,7 +20,7 @@ class TestTooManyMissings(TestCase):
         df = CSVReader(
             self.distribution, file_source=csv_path("sample_data.csv")
         ).read()
-        MissingValuesValidation(df, None, None).validate()
+        MissingValuesValidation(df).validate()
 
     def test_single_null_not_ok_with_custom_option(self):
         df = CSVReader(
@@ -28,4 +28,4 @@ class TestTooManyMissings(TestCase):
         ).read()
         options = ValidationOptions.create_with_defaults(max_missing_proportion=0.2)
         with self.assertRaises(FieldTooManyMissingsError):
-            MissingValuesValidation(df, None, None, options=options).validate()
+            MissingValuesValidation(df, options=options).validate()
