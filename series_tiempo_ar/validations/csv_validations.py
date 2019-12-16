@@ -7,12 +7,39 @@ from pandas.core.dtypes.common import is_numeric_dtype
 from series_tiempo_ar import custom_exceptions as ce
 from series_tiempo_ar.helpers import freq_iso_to_pandas
 
-MINIMUM_VALUES = 2
-MAX_MISSING_PROPORTION = 0.999
-MAX_TOO_SMALL_PROPORTION = 0.02
-MIN_TEMPORAL_FRACTION = 10
-MAX_FIELD_TITLE_LEN = 60
-MAX_NULL_SERIES_PROPORTION = 0.20
+DEFAULT_OPTIONS = {
+    "minimum_values": 2,
+    "max_missing_proportion": 0.999,
+    "max_too_small_proportion": 0.02,
+    "min_temporal_fraction": 10,
+    "max_field_title_len": 60,
+    "max_null_series_proportion": 0.2,
+}
+
+
+class ValidationOptions:
+    def __init__(
+        self,
+        minimum_values,
+        max_missing_proportion,
+        max_too_small_proportion,
+        min_temporal_fraction,
+        max_field_title_len,
+        max_null_series_proportion,
+    ):
+        self.minimum_values = minimum_values
+        self.max_missing_proportion = max_missing_proportion
+        self.max_too_small_proportion = max_too_small_proportion
+        self.min_temporal_fraction = min_temporal_fraction
+        self.max_field_title_len = max_field_title_len
+        self.max_null_series_proportion = max_null_series_proportion
+
+    @classmethod
+    def create_with_defaults(cls, **kwargs):
+        options = DEFAULT_OPTIONS.copy()
+
+        options.update(kwargs)
+        return cls(**options)
 
 
 def _assert_repeated_value(field_name, field_values, exception):
@@ -24,6 +51,9 @@ def _assert_repeated_value(field_name, field_values, exception):
 
 class BaseValidation:
     def __init__(self, df, distrib_meta, catalog, options=None):
+        if options is None:
+            options = ValidationOptions(**DEFAULT_OPTIONS)
+
         self.df = df
         self.distrib_meta = distrib_meta
         self.catalog = catalog
@@ -43,12 +73,17 @@ class FieldViewValuesValidation(BaseValidation):
             not_null_values = len(self.df[field][self.df[field].notnull()])
 
             # se suma una nueva serie demasiado corta (si está vacía no la cuento)
-            if not_null_values > 0 and not not_null_values >= MINIMUM_VALUES:
+            if 0 < not_null_values < self.options.minimum_values:
                 series_too_small += 1
 
             # chequea si hay demasiadas series cortas
-            if float(series_too_small) / series_total > MAX_TOO_SMALL_PROPORTION:
-                raise ce.FieldFewValuesError(field, not_null_values, MINIMUM_VALUES)
+            if (
+                float(series_too_small) / series_total
+                > self.options.max_too_small_proportion
+            ):
+                raise ce.FieldFewValuesError(
+                    field, not_null_values, self.options.minimum_values
+                )
 
 
 class DistributionNullSeriesValidation(BaseValidation):
@@ -63,9 +98,11 @@ class DistributionNullSeriesValidation(BaseValidation):
                 null_series_amount += 1
 
         null_proportion = float(null_series_amount) / series_total
-        if null_proportion >= MAX_NULL_SERIES_PROPORTION:
+        if null_proportion >= self.options.max_null_series_proportion:
             raise ce.DistributionTooManyNullSeriesError(
-                distribution_identifier, MAX_NULL_SERIES_PROPORTION, null_proportion
+                distribution_identifier,
+                self.options.max_null_series_proportion,
+                null_proportion,
             )
 
 
@@ -100,8 +137,10 @@ class TitleLengthValidation(BaseValidation):
     def validate(self):
         # Los nombres de los campos tienen que tener un máximo de caracteres
         for field in self.df.columns:
-            if len(field) > MAX_FIELD_TITLE_LEN:
-                raise ce.FieldTitleTooLongError(field, len(field), MAX_FIELD_TITLE_LEN)
+            if len(field) > self.options.max_field_title_len:
+                raise ce.FieldTitleTooLongError(
+                    field, len(field), self.options.max_field_title_len
+                )
 
 
 class MissingValuesValidation(BaseValidation):
@@ -112,7 +151,7 @@ class MissingValuesValidation(BaseValidation):
             positive_values = len(self.df[field][self.df[field].notnull()])
             missing_values = total_values - positive_values
             missing_values_prop = missing_values / float(total_values)
-            if not missing_values_prop <= MAX_MISSING_PROPORTION:
+            if not missing_values_prop <= self.options.max_missing_proportion:
                 raise ce.FieldTooManyMissingsError(
                     field, missing_values, positive_values
                 )

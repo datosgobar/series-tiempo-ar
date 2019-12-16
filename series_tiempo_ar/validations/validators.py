@@ -7,7 +7,7 @@
 # pylint: disable=W0401
 from series_tiempo_ar.custom_exceptions import TimeSeriesError
 from series_tiempo_ar.validations.xlsx_validations import *
-from . import csv_validations
+from .csv_validations import ValidationOptions, BaseValidation
 
 
 class Validator:
@@ -50,7 +50,7 @@ class Validator:
         if self.validations:
             return self.validations
 
-        return csv_validations.BaseValidation.__subclasses__()
+        return BaseValidation.__subclasses__()
 
 
 # Entry points "legacy"
