@@ -17,6 +17,9 @@ class Validator:
         self.validations = validations
 
     def get_distribution_errors(self):
+        """Ejecuta todas las validaciones y devuelve los errores (excepciones)
+        levantadas
+        """
         distribution = self.catalog.get_distribution(self.distribution_id)
         df = self.catalog.load_ts_distribution(self.distribution_id)
         errors = []
@@ -29,13 +32,17 @@ class Validator:
         return errors
 
     def validate_distribution(self, df=None):
+        """Ejecuta validaciones. Lanza una excepción de tipo TimeSeriesError
+        ante un error
+        """
+        distribution = self.catalog.get_distribution(self.distribution_id)
+        df = (
+            df
+            if df is not None
+            else self.catalog.load_ts_distribution(self.distribution_id)
+        )
+
         for validation in self._get_validations():
-            distribution = self.catalog.get_distribution(self.distribution_id)
-            df = (
-                df
-                if df is not None
-                else self.catalog.load_ts_distribution(self.distribution_id)
-            )
 
             validation(df, distribution, self.catalog).validate()
 
@@ -44,6 +51,9 @@ class Validator:
             return self.validations
 
         return csv_validations.BaseValidation.__subclasses__()
+
+
+# Entry points "legacy"
 
 
 def validate_distribution(df, catalog, _dataset_meta, distrib_meta, _=None):
