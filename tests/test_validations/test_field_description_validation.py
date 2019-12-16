@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from series_tiempo_ar.custom_exceptions import NonExistentDescriptionError
-from series_tiempo_ar.validations.csv_validations import validate_field_descriptions
+from series_tiempo_ar.validations.csv_validations import FieldDescriptionsValidation
 from tests.helpers import read_data_json
 
 
@@ -11,4 +11,4 @@ class ValidateDescriptionExistsTests(TestCase):
         distribution = catalog.get_distributions()[0]
         df = None
         with self.assertRaises(NonExistentDescriptionError):
-            validate_field_descriptions(df, distribution, catalog)
+            FieldDescriptionsValidation(df, distribution, catalog).validate()

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from series_tiempo_ar.validations.csv_validations import validate_values_are_numeric
+from series_tiempo_ar.validations.csv_validations import ValuesAreNumericValidation
 from tests.helpers import read_data_json
 
 
@@ -9,4 +9,4 @@ class ValuesAreNumericTests(TestCase):
         catalog = read_data_json("distribution_missing_column_in_data.json")
         distrib_meta = catalog.get_distribution(identifier="125.1")
         df = catalog.load_ts_distribution("125.1")
-        validate_values_are_numeric(df, distrib_meta, catalog)
+        ValuesAreNumericValidation(df, distrib_meta, catalog).validate()

@@ -10,37 +10,48 @@ from series_tiempo_ar.validations.xlsx_validations import *
 from . import csv_validations
 
 
-def _is_validation_function(func):
-    return (
-        callable(func)
-        and func.__module__ == csv_validations.__name__
-        and func.__name__[0] != "_"
-    )
+class Validator:
+    def __init__(self, catalog, distrbution_id, validations=None):
+        self.catalog = catalog
+        self.distribution_id = distrbution_id
+        self.validations = validations
 
+    def get_distribution_errors(self):
+        distribution = self.catalog.get_distribution(self.distribution_id)
+        df = self.catalog.load_ts_distribution(self.distribution_id)
+        errors = []
+        for validation in self._get_validations():
+            try:
+                validation(df, distribution, self.catalog).validate()
+            except TimeSeriesError as e:
+                errors.append(e)
 
-CSV_VALIDATIONS = [
-    x
-    for x in [getattr(csv_validations, x) for x in dir(csv_validations)]
-    if _is_validation_function(x)
-]
+        return errors
+
+    def validate_distribution(self, df=None):
+        for validation in self._get_validations():
+            distribution = self.catalog.get_distribution(self.distribution_id)
+            df = (
+                df
+                if df is not None
+                else self.catalog.load_ts_distribution(self.distribution_id)
+            )
+
+            validation(df, distribution, self.catalog).validate()
+
+    def _get_validations(self):
+        if self.validations:
+            return self.validations
+
+        return csv_validations.BaseValidation.__subclasses__()
 
 
 def validate_distribution(df, catalog, _dataset_meta, distrib_meta, _=None):
-    for validation in CSV_VALIDATIONS:
-        validation(df, distrib_meta, catalog)
+    Validator(catalog, distrib_meta["identifier"]).validate_distribution(df)
 
 
 def get_distribution_errors(catalog, distribution_id):
-    distribution = catalog.get_distribution(distribution_id)
-    df = catalog.load_ts_distribution(distribution_id)
-    errors = []
-    for validation in CSV_VALIDATIONS:
-        try:
-            validation(df, distribution, catalog)
-        except TimeSeriesError as e:
-            errors.append(e)
-
-    return errors
+    return Validator(catalog, distribution_id).get_distribution_errors()
 
 
 def validate_distribution_scraping(
