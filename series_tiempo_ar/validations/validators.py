@@ -11,10 +11,11 @@ from .csv_validations import ValidationOptions, BaseValidation
 
 
 class Validator:
-    def __init__(self, catalog, distrbution_id, validations=None):
+    def __init__(self, catalog, distrbution_id, validations, options=None):
         self.catalog = catalog
         self.distribution_id = distrbution_id
         self.validations = validations
+        self.options = options
 
     def get_distribution_errors(self):
         """Ejecuta todas las validaciones y devuelve los errores (excepciones)
@@ -23,9 +24,9 @@ class Validator:
         distribution = self.catalog.get_distribution(self.distribution_id)
         df = self.catalog.load_ts_distribution(self.distribution_id)
         errors = []
-        for validation in self._get_validations():
+        for validation in self.validations:
             try:
-                validation(df, distribution, self.catalog).validate()
+                validation(df, distribution, self.catalog, self.options).validate()
             except TimeSeriesError as e:
                 errors.append(e)
 
@@ -42,26 +43,23 @@ class Validator:
             else self.catalog.load_ts_distribution(self.distribution_id)
         )
 
-        for validation in self._get_validations():
-
+        for validation in self.validations:
             validation(df, distribution, self.catalog).validate()
-
-    def _get_validations(self):
-        if self.validations:
-            return self.validations
-
-        return BaseValidation.__subclasses__()
 
 
 # Entry points "legacy"
 
 
 def validate_distribution(df, catalog, _dataset_meta, distrib_meta, _=None):
-    Validator(catalog, distrib_meta["identifier"]).validate_distribution(df)
+    Validator(
+        catalog, distrib_meta["identifier"], BaseValidation.__subclasses__()
+    ).validate_distribution(df)
 
 
-def get_distribution_errors(catalog, distribution_id):
-    return Validator(catalog, distribution_id).get_distribution_errors()
+def get_distribution_errors(catalog, distribution_id, options=None):
+    return Validator(
+        catalog, distribution_id, BaseValidation.__subclasses__(), options
+    ).get_distribution_errors()
 
 
 def validate_distribution_scraping(
