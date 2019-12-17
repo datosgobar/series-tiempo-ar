@@ -3,3 +3,4 @@ pylint
 black
 pyyaml
 cryptography
+regex!=2019.12.9
