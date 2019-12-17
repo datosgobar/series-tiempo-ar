@@ -3,10 +3,12 @@
 
 """Módulo con métodos para hacer validaciones"""
 
-# pylint: disable=W0614
-# pylint: disable=W0401
 from series_tiempo_ar.custom_exceptions import TimeSeriesError
-from series_tiempo_ar.validations.xlsx_validations import *
+from series_tiempo_ar.validations.xlsx_validations import (
+    validate_header_cell_field_id,
+    validate_header_cell_field_id_or_blank,
+    validate_distinct_scraping_start_cells,
+)
 from .csv_validations import ValidationOptions, BaseValidation
 
 
